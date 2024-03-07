@@ -1,0 +1,6 @@
+.Menu{
+    background-color: #A7E3E1;
+}
+#settings:hover + #profile {
+    display: block;
+}
