@@ -27,14 +27,14 @@ const Menu = () => {
     
       <ul className="mt-5  text-xl">
       <li className="flex items-center hover:border-l-4 hover:bg-teal-50 rounded" >
-  <Link to="/" className="flex items-center mb-4 m-3 ">
+  <Link to="home" className="flex items-center mb-4 m-3 ">
     <MdOutlineDashboard className="mr-2" /> Dashboard
   </Link>
 </li> 
 
 <li className="flex flex-col group hover:border-l-4 hover:bg-teal-50 rounded transition-all duration-300 ease-in-out ">
     <Link
-        to="/master"
+        to="users"
         className="flex items-center m-3"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

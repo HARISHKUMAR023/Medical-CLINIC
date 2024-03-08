@@ -28,26 +28,26 @@ const Layout = () => {
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/dashboard",
     element: <Layout />,
     children: [
       {
-        path: "/",
+        path: "home",
         element: <Home />,
       },
 
       {
-        path: "/users",
+        path: "users",
         element: <Users />,
       },
       {
-        path: "/admin",
+        path: "admin",
         element: <Admin />,
       },
     ],
   },
   {
-    path: "/login",
+    path: "/",
     element: <Login />,
   },
 ]);

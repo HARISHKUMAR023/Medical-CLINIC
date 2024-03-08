@@ -18,15 +18,27 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import "./Navbar.css";
-
-
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {logout } from '../../app/authSlice';
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  console.log('IsLoggedIn:', isLoggedIn);
+  // const username = useSelector((state) => state.auth.user.username);
 
+
+   const handleLogout = () => {
+    dispatch(logout());
+    navigate('/'); // Redirect to login page after logout
+  };
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -61,8 +73,9 @@ const Navbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}></MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
 
@@ -134,7 +147,7 @@ const Navbar = () => {
         </Typography>
       <Breadcrumbs aria-label="breadcrumb">
         <Link underline="hover" color="inherit" href="/">
-        Dashbord
+       Dashbord
         </Link>
       
         <Link
