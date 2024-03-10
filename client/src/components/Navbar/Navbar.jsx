@@ -138,23 +138,24 @@ const Navbar = () => {
        
         <div role="presentation" >
         <Typography
-          variant="h6"
+          variant="p"
           noWrap
           component="div"
-          sx={{ display: { xs: 'none', sm: 'block' } }} className='font-extrabold'
+          sx={{ display: { xs: 'none', sm: 'block' } }} className='font-bold '
         >
           Dashbord
         </Typography>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
+      <Breadcrumbs aria-label="breadcrumb" className='text-sm'>
+        <Link underline="hover" color="inherit" fontSize={14} href="/" className='text-sm'>
        Dashbord
         </Link>
       
-        <Link
+        <Link fontSize={14}
           underline="hover"
           color="text.primary"
           href="/material-ui/react-breadcrumbs/"
           aria-current="page"
+          className='text-sm'
         >
          Chart view
         </Link>

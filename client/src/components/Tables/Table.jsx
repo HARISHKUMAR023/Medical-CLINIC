@@ -1,0 +1,164 @@
+// Table.js
+
+import  { useState } from 'react';
+import PropTypes from 'prop-types';
+
+import Switch, { switchClasses } from '@mui/joy/Switch';
+import edit from "../../assets/images/icons/tableicone/edit.png";
+import del from "../../assets/images/icons/tableicone/delete.png";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+import { BsFilterLeft } from "react-icons/bs";
+import { LuFilter } from "react-icons/lu";
+import { MdOutlineFormatListBulleted } from "react-icons/md";
+import { IoSearch } from "react-icons/io5";
+const Table = ({ data, columns, pageSize }) => {
+    const [checkedRows, setCheckedRows] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(data.length / pageSize);
+  const paginatedData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const totalRecordsPerPage = paginatedData.length;
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  const handleSwitchChange = (rowIndex, isChecked) => {
+    setCheckedRows((prevCheckedRows) => ({
+      ...prevCheckedRows,
+      [rowIndex]: isChecked,
+    }));
+  };
+
+  return (
+    <div className="container mx-auto p-4 bg-white">
+      <div className='flex justify-between mb-4'>
+        <div className='flex items-center ' >
+        <BsFilterLeft className='mr-2'/>
+         <p className='mr-3'>Sort By:</p>
+         <Box sx={{ minWidth: 120, border: 'none' }} className='border-none bg-white text-white border-white'>
+    <FormControl fullWidth className='border-none bg-white text-white border-white' sx={{ border: 'none' }}>
+      <NativeSelect
+        className='border-none border-b-0'
+        sx={{ border: 'none', '&:focus': { border: 'none' } }}
+        defaultValue={30}
+      >
+        <option value={10} className='border-none'>
+          Mounth
+        </option>
+        <option value={20} className='border-none'>
+          Week
+        </option>
+        <option value={30} className='border-none'>
+          Newest
+        </option>
+      </NativeSelect>
+    </FormControl>
+  </Box>
+
+  <p className='ml-4'>Total: <span>{data.length}</span></p>
+        </div>
+        <div className='flex items-center'>
+        <IoSearch className='mx-2' />
+        <MdOutlineFormatListBulleted  className='mx-2'/>
+        <LuFilter className='mx-2' />
+          <button className='text-white p-1 rounded' style={{backgroundColor:'#00BBD1'}}>+ Create New</button>
+        </div>
+      </div>
+      <hr  />
+      <table className="min-w-full bg-white   text-slate-700 text-sm mt-2">
+        <thead>
+          <tr className='text-black bg-slate-100'>
+            {columns.map((column) => (
+              <th key={column.key} className="py-2 px-4  text-center font-medium">
+                {column.title}
+              </th>
+            ))}
+              <th  className="py-2 px-4 text-center font-medium">
+             Status
+           </th>
+           <th  className="py-2 px-4 text-center font-medium">
+           
+           </th> 
+          </tr>
+        </thead>
+        <tbody>
+          {paginatedData.map((row, index) => (
+            <tr key={index} className="hover:bg-gray-100">
+              {columns.map((column) => (
+                <td key={column.key} className="py-2 px-4  text-center font-light">
+                  {row[column.key]}
+                </td>
+              ))}
+              <td className='py-2 px-4  text-center'>
+              <Switch
+       color={checkedRows[index] ? 'success' : 'danger'}
+       checked={checkedRows[index] || false}
+       onChange={(event) => handleSwitchChange(index, event.target.checked)}
+      sx={{
+        '--Switch-thumbSize': '12px',
+        '--Switch-trackWidth': '30px',
+        '--Switch-trackHeight': '18px',
+        '--Switch-trackBackground': '#FF3838',
+        '&:hover': {
+          '--Switch-trackBackground': '#FF3838',
+        },
+        [`&.${switchClasses.checked}`]: {
+          '--Switch-trackBackground': '#2CA302',
+          '&:hover': {
+            '--Switch-trackBackground': '#2CA302',
+          },
+        },
+      }}
+    />
+      {checkedRows[index] ? <span className='pl-2 text-green-600 text-center'>Active</span> : <span className='pl-2 text-red-600 text-center'>Inactive</span>}
+              </td>
+              
+              <td className="py-2 px-4 text-center">
+                <button className="px-2 py-1 mr-2  rounded" onClick={() => handleEdit(row)}>
+                  <img src={edit} alt="" />
+                </button>
+                <button className="px-2 py-1  rounded" onClick={() => handleDelete(row)}>
+                 <img src={del} alt="" />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="mt-4 flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+          <span className="px-3 py-2 text-slate-700">{`Records Per Page: ${totalRecordsPerPage} `}</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <button
+            className="px-3 py-2 border border-gray-300 rounded"
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            Previous
+          </button>
+          <span className="px-3 py-2">{`${currentPage} of ${totalPages}`}</span>
+          <button
+            className="px-3 py-2 border border-gray-300 rounded"
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+Table.propTypes = {
+  data: PropTypes.array.isRequired,
+  columns: PropTypes.array.isRequired,
+  pageSize: PropTypes.number.isRequired,
+};
+
+export default Table;

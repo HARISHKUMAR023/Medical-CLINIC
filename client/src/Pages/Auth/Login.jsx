@@ -1,3 +1,4 @@
+import * as React from 'react';
 import "./Login.css";
 import axios from 'axios'; // Or use fetch API
 import { useDispatch  } from 'react-redux';
@@ -18,11 +19,22 @@ import { FaLock } from "react-icons/fa";
 import { useState } from "react";
 import { loginRequest, loginSuccess, loginFailure } from "../../app/authSlice";
 import { useNavigate } from "react-router-dom";
+import Visibility from '@mui/icons-material/Visibility';
+
+import IconButton from '@mui/material/IconButton';
 const Login = () => {
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,7 +50,8 @@ const Login = () => {
        const user ={
         
          email:response.data.email,
-         token : response.data.token
+         token : response.data.token,
+         usertype:response.data.userType
        }
       console.log( user);
   
@@ -46,7 +59,7 @@ const Login = () => {
       // const { usernames, token } = response.data;
       // const { usernames, token } = response.data;
 
-      dispatch(loginSuccess({email:response.data.email, token: response.data.token }));
+      dispatch(loginSuccess({email:response.data.email, token: response.data.token , usertype:response.data.userType}));
 
       console.log("Login successful");
      
@@ -87,7 +100,7 @@ const Login = () => {
           />
         </FormControl>
         <br />
-        <FormControl sx={{ m: 1, width: '50ch',marginTop:'10ch' }} variant="standard" >
+        {/* <FormControl sx={{ m: 1, width: '50ch',marginTop:'10ch' }} variant="standard" >
           <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
           <Input className="text-black  " type="password"  value={password}
          onChange={(e) => setPassword(e.target.value)}
@@ -98,6 +111,24 @@ const Login = () => {
               'aria-label': 'weight',
               
             }}
+          />
+        </FormControl> */}
+         <FormControl sx={{ m: 1, width: '50ch',marginTop:'10ch' }} variant="standard">
+          <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+          <Input className="text-black " value={password}
+            id="standard-adornment-password"
+            type={showPassword ? 'text' : 'password'}    onChange={(e) => setPassword(e.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <FaLock className="text-teal-300  " /> : <Visibility className="text-teal-300  "  />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
         </FormControl>
         <div className="flex justify-evenly mt-4">

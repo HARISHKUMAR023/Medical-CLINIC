@@ -14,7 +14,7 @@ const login = async (req, res) => {
     // Generate and sign JWT with user data and roles
     const token = generateJwtToken(user.id, user.email, user.roles);
 
-    res.json({name ,email,  token });
+    res.json({ name: user.name, email, token, userType: user.roles });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });

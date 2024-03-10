@@ -18,7 +18,7 @@ mongoose.connect(mongoUri)
     .catch(err => console.error(err));
 
     const corsOptions = {
-      origin: 'http://localhost:5173', // Replace with your React app's URL
+      origin: 'http://localhost:5173/', // Replace with your React app's URL
       optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
     };
 // Middleware

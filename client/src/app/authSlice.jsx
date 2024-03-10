@@ -5,6 +5,7 @@ const initialState = {
   user: {
     email: null,
     token: null,
+    usertype:null,
   },
   isLoading: false,
   error: null,
@@ -31,7 +32,7 @@ const authSlice = createSlice({
     },
     logout(state) {
       state.isLoggedIn = false;
-      state.user = { email: null, token: null }; // Reset user data on logout
+      state.user = { email: null, token: null, usertype:null}; // Reset user data on logout
     },
   },
 });

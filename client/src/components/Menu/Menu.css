@@ -1,6 +1,27 @@
 .Menu{
     background-color: #A7E3E1;
+    /* mask-image:url('../../assets/illustration/Home-illustration/bg.svg') ; */
+
 }
+/* .mask-container {
+    position: relative;
+    background-color: #a7e3e3; 
+    width: 100%;
+    height: 100vh; 
+    overflow: hidden; 
+} */
+
+/* .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../../assets/illustration/Home-illustration/bg.svg') center / contain no-repeat;
+    z-index: -1; 
+} */
+
+
 #settings:hover + #profile {
     display: block;
 }
