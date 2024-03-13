@@ -22,6 +22,9 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {logout } from '../../app/authSlice';
+import bell from '../../assets/images/icons/menu/Bell.png';
+import comment from '../../assets/images/icons/menu/comment.png';
+import profile from '../../assets/images/icons/menu/profile.png';
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -166,7 +169,7 @@ const Navbar = () => {
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <IconButton size="large" aria-label="show 4 new mails" color="inherit">
             <Badge badgeContent={4} color="error">
-              <ChatOutlinedIcon />
+              <ChatOutlinedIcon className='icon' />
             </Badge>
           </IconButton>
           <IconButton
@@ -175,7 +178,7 @@ const Navbar = () => {
             color="inherit"
           >
             <Badge badgeContent={17} color="error">
-              <IoNotificationsOutline />
+              <IoNotificationsOutline className='icon' />
             </Badge>
           </IconButton>
           <IconButton
@@ -187,10 +190,11 @@ const Navbar = () => {
             onClick={handleProfileMenuOpen}
             color="inherit"
           >
-            <AccountCircle />
+            {/* <AccountCircle className='icon'/> */}
+            <img src={profile} className='h-12 w-12' alt="" />
           </IconButton>
         </Box>
-        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+        {/* <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
           <IconButton
             size="large"
             aria-label="show more"
@@ -199,9 +203,9 @@ const Navbar = () => {
             onClick={handleMobileMenuOpen}
             color="inherit"
           >
-            <MoreIcon />
+            <MoreIcon  />
           </IconButton>
-        </Box>
+        </Box> */}
       </Toolbar>
     </AppBar>
     {renderMobileMenu}

@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors'); // Consider using CORS if necessary
 const path = require('path'); // For serving static assets in production
-
+const rolsRoutes = require('./routes/rols.routes')
 const userRoutes = require('./routes/user.route'); // Replace with your user routes path
 const authRoutes = require('./routes/auth.routes'); // Replace with your auth routes path
 // Add other route imports as needed (e.g., protected routes)
@@ -27,6 +27,7 @@ app.use(express.json());
 // Routes
 app.use('/api/', userRoutes);
  app.use('/api/', authRoutes);
+ app.use('/api/',rolsRoutes)
 // Add other route handler mappings here
 
 // Serve static assets in production (optional)

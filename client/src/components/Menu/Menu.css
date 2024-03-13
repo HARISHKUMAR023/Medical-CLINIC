@@ -1,7 +1,14 @@
 .Menu{
     background-color: #A7E3E1;
+
     /* mask-image:url('../../assets/illustration/Home-illustration/bg.svg') ; */
 
+}
+/* .MenuClosed {
+    transform: translateX(-100%);
+  }  */
+.togglemenu{
+    transition: transform 0.8s ease-in-out;
 }
 /* .mask-container {
     position: relative;
@@ -25,3 +32,23 @@
 #settings:hover + #profile {
     display: block;
 }
+/* li:hover{
+  background-color: #D9F0F3;  
+} */
+.my-active{
+    background-color: red;
+    color: white;
+}
+/* Menu.css */
+.menu-open {
+    transition: margin-left 0.3s ease-in-out; /* Adjust the duration and timing function as needed */
+    margin-left: 0;
+  }
+  
+  .menu-closed {
+    transition: margin-left 0.3s ease-in-out; /* Adjust the duration and timing function as needed */
+    margin-left: -200px; /* Adjust the width of your menu */
+  }
+  
+  /* Add any other styles as needed */
+  

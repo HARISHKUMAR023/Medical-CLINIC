@@ -9,7 +9,7 @@ import axios from 'axios';
 // ];
 
 const columns = [
-  { key: 'name', title: 'Role Name' },
+  { key: 'role', title: 'Role Name' },
   { key: 'createdAt', title: 'Created On' },
   { key: 'CreatedBy', title: 'Created By' },
   
@@ -21,7 +21,7 @@ const [data , setData] = useState([]);
 useEffect(()=>{
 const fetchData = async()=>{
   try{
-    const response = await axios.get('http://localhost:5000/api/getuser');
+    const response = await axios.get('http://localhost:5000/api/roles');
     setData(response.data)
     console.log(response)
   }catch(error){

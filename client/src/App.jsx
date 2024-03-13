@@ -17,10 +17,10 @@ const Layout = () => {
   return (
     <div className="main flex flex-row ">
       {/* <div className="container flex flex-row "> */}
-        <div className="menucontainer basis-2/12">
+        <div className="menucontainer  ">
           <Menu />
         </div>
-        <div className="content-Container basis-10/12">
+        <div className="content-Container basis-full">
           <Navbar />
           <div className="overflow-y-auto">
       <Outlet />
