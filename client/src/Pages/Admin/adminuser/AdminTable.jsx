@@ -4,7 +4,7 @@ import  { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Switch, { switchClasses } from '@mui/joy/Switch';
-import edit from "../../assets/images/icons/tableicone/edit.svg";
+
 // import del from "../../assets/images/icons/tableicone/delete.svg";
 // import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -20,15 +20,21 @@ import { IoSearch } from "react-icons/io5";
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import CreateRols from '../../Pages/Admin/Rols/CreateRols';
-const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
+import Createuser from './Createuser';
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import Deletepop from '../../../components/Deletepop/Deletepop';
+import axios from 'axios';
+const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
+
   const [showPopup, setShowPopup] = useState(false);
     const [checkedRows, setCheckedRows] = useState({});
+    const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / pageSize);
   const paginatedData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const totalRecordsPerPage = paginatedData.length;
-
+  const [showPopUp, setShowPopUp] = useState(false);
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -38,14 +44,45 @@ const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
       [rowIndex]: isChecked,
     }));
   };
+
+
   // form toggle 
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
+
+  const handleDelete = async (id) => {
+    // Show the delete confirmation pop-up
+    setShowPopUp(true);
+  
+    // Set the ID of the item to be deleted
+    setItemToDeleteId(id);
+  };
+  
+  const handleDeleteConfirmed = async () => {
+    try {
+      // Perform the delete action using the ID stored in state
+      await axios.delete(`http://localhost:5000/api/users/${itemToDeleteId}`);
+      // Refresh data
+      onDataRefresh();
+      // Close the pop-up after successful deletion
+      setShowPopUp(false);
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+  };
+  
+  const handleCancel = () => {
+    // Logic to handle cancel action
+    console.log('Cancelled');
+    setShowPopUp(false);
+  };
   return (
-    <div  className='h-auto mx-2'>
-       {showPopup  && <CreateRols onClose={togglePopup} onDataRefresh={onDataRefresh} />}
-    <div className="container mx-auto p-4  bg-white">
+    <div className='h-auto mx-2'>
+ {showPopup  && < Createuser onClose={togglePopup} onDataRefresh={onDataRefresh}/>}
+    <div className="container mx-auto p-4  bg-white z-10">
+      
       <div className='flex justify-between mb-4'>
         <div className='flex items-center ' >
         <BsFilterLeft className='mr-2'/>
@@ -77,6 +114,7 @@ const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
         <MdOutlineFormatListBulleted  className='mx-3 text-black'/>
         <LuFilter className='mx-3 text-black' />
           <button className='text-white px-3 p-1 text-sm font-normal rounded' style={{backgroundColor:'#00BBD1'}} onClick={togglePopup}>+ Create New</button>
+        
         </div>
       </div>
       <hr  />
@@ -102,9 +140,24 @@ const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
 
             <tr key={index} className="hover:bg-gray-100 shadow-sm py-3 rounded-md">
               {columns.map((column) => (
-                <td key={column.key} className="py-2 px-4   font-light">
-                  {row[column.key]}
-                </td>
+                
+                <td key={column.key} className="py-2 px-4 font-light">
+                {column.key === 'profilePic' ? (
+                  <img
+                    src={`http://localhost:5000/uploads/profiles/${row[column.key] || 'default-profile.png'}`}
+                    alt="Profile"
+                    style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '50%' }}
+                  />
+                ) : column.key === 'nameAndEmail' ? (
+                  <div>
+                    <div>{row.name}</div>
+                    <div>{row.email}</div>
+                    <div>{row.mobile}</div>
+                  </div>
+                ) : (
+                  row[column.key]
+                )}
+              </td>
               ))}
               <td className='py-2 px-4 flex items-center'>
               <Switch
@@ -133,10 +186,10 @@ const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
               
               <td className="py-2 px-4 ">
                 <button className="px-2 py-1 mr-2  rounded" onClick={() => handleEdit(row)}>
-                  <img src={edit} alt="" />
+                <FaEdit  className='w-6 h-8'/>
                 </button>
-                <button className="px-2 py-1 mr-2  rounded" onClick={() => handleEdit(row)}>
-                  <img src={edit} alt="" />
+                <button className="px-2 py-1 mr-2  rounded hover:text-red-500"  onClick={() => handleDelete(row._id)}>
+                <MdDelete className='w-6 h-8' />
                 </button>
                 {/* <button className="px-2 py-1    rounded  " onClick={() => handleDelete(row)}>
                  <img src={del} className='text-red-500' alt="" />
@@ -147,7 +200,14 @@ const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
           ))}
         </tbody>
       </table>
-
+  
+      {showPopUp && (
+       <Deletepop 
+       message="Are you sure you want to delete?"
+       onCancel={handleCancel}
+       onDelete={handleDeleteConfirmed}
+     />
+      )}
       <div className="mt-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <span className="px-3 py-2 " style={{color:'#999999'}}>{`Records Per Page: ${totalRecordsPerPage} `}</span>
@@ -185,11 +245,20 @@ const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
   );
 };
 
-Table.propTypes = {
+AdminTable.propTypes = {
   data: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
   pageSize: PropTypes.number.isRequired,
   onDataRefresh: PropTypes.func.isRequired
 };
 
-export default Table;
+export default AdminTable;
+
+
+// const AdminTable = () => {
+//   return (
+//     <div></div>
+//   )
+// }
+
+// export default AdminTable

@@ -3,8 +3,8 @@ const RolePermission = require('../models/roles.model');
 
 const createRole = async (req, res) => {
   try {
-    const { role, permissions } = req.body;
-    const newRolePermission = new RolePermission({ role, permissions });
+    const { role, permissions,createdBy } = req.body;
+    const newRolePermission = new RolePermission({ role, permissions,createdBy });
     const savedRolePermission = await newRolePermission.save();
     res.status(201).json(savedRolePermission);
   } catch (error) {

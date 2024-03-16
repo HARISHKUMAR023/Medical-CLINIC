@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Table from '../../../components/Tables/Table';
 import axios from 'axios';
-
+import PropTypes from 'prop-types';
 // const data = [
 
 // ];
@@ -11,37 +11,42 @@ import axios from 'axios';
 const columns = [
   { key: 'role', title: 'Role Name' },
   { key: 'createdAt', title: 'Created On' },
-  { key: 'CreatedBy', title: 'Created By' },
+  { key: 'createdBy', title: 'Created By' },
   
 
 ];
 
 const Rols = () => {
 const [data , setData] = useState([]);
-useEffect(()=>{
-const fetchData = async()=>{
-  try{
+useEffect(() => {
+  fetchData();
+}, []);
+
+const fetchData = async () => {
+  try {
     const response = await axios.get('http://localhost:5000/api/roles');
-    setData(response.data)
-    console.log(response)
-  }catch(error){
-    console.error('erroe fetching userdata', error)
+    setData(response.data);
+  } catch (error) {
+    console.error('Error fetching user data', error);
   }
 };
-fetchData();
 
-const intervalId = setInterval(fetchData, 5000);
-return () => clearInterval(intervalId);
-},[]);
+
+const handleDataRefresh = async () => {
+  await fetchData();
+};
 
   return (
     <div>
  
-      <Table data={data} columns={columns} pageSize={8}  />
+      <Table data={data} columns={columns} pageSize={8} onDataRefresh={handleDataRefresh} />
     </div>
   );
 };
 
-
+Rols.propTypes = {
+  // Add onDataRefresh to propTypes
+  onDataRefresh: PropTypes.func.isRequired
+};
 
 export default Rols

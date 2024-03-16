@@ -20,10 +20,10 @@ const login = async (req, res) => {
     }
 
     // Generate and sign JWT with user data and roles
-    const token = generateJwtToken(user.id, user.email, user.roles);
+    const token = generateJwtToken(user.id, user.email, user.roles,);
 
     res.json({
-       name: user.name,
+       name:user.name,
         email, token, 
         roles: {
           id: userTypeDetails._id,

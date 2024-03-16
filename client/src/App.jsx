@@ -9,6 +9,9 @@ import Footer from './components/Footer/Footer';
 import Users from './Pages/Users/Users';
 import Admin from "./Pages/Admin/Admin";
 import {  useSelector } from 'react-redux';
+import Adminuser from './Pages/Admin/adminuser/Adminuser';
+import Manufacturer from './Pages/Master/Manufacturer/Manufacturer';
+import Products from './Pages/Master/Products/Products';
 const Layout = () => {
   const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn )
   if (!isLoggedIn) {
@@ -50,6 +53,22 @@ const router = createBrowserRouter([
       {
         path: "admin",
         element: <Admin />,
+      },
+      {
+        path: "adminuser",
+        element: <Adminuser />,
+      },
+      {
+        path: "FinancialYear",
+        element: <Adminuser />,
+      },
+      {
+        path: "Products",
+        element: <Products  />,
+      },
+      {
+        path: "Manufacturer",
+        element: <Manufacturer />,
       },
     ],
   },

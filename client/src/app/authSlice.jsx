@@ -3,9 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   isLoggedIn: false,
   user: {
+    name:null,
     email: null,
     token: null,
     usertype:null,
+    permissions: [],
   },
   isLoading: false,
   error: null,
@@ -21,7 +23,13 @@ const authSlice = createSlice({
     loginSuccess(state, action) {
       console.log('loginSuccess action payload:', action.payload);
       state.isLoggedIn = true;
-      state.user = action.payload;
+      state.user = {
+        name:action.payload.name,
+        email: action.payload.email,
+        token: action.payload.token,
+        usertype: action.payload.usertype,
+        permissions: action.payload.permissions, // Assuming permissions are directly within action.payload
+      };
       state.isLoading = false;
       state.error = null;
     },
@@ -32,7 +40,7 @@ const authSlice = createSlice({
     },
     logout(state) {
       state.isLoggedIn = false;
-      state.user = { email: null, token: null, usertype:null}; // Reset user data on logout
+      state.user = { name:null,email: null, token: null, usertype:null, permissions: []}; // Reset user data on logout
     },
   },
 });

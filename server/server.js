@@ -7,8 +7,14 @@ const userRoutes = require('./routes/user.route'); // Replace with your user rou
 const authRoutes = require('./routes/auth.routes'); // Replace with your auth routes path
 // Add other route imports as needed (e.g., protected routes)
 
+
 const app = express();
 const port = process.env.PORT || 5000; // Use environment variable for port
+
+
+app.use('/uploads/profiles', express.static(path.join(__dirname, 'uploads/profiles')));
+
+
 
 // Connect to MongoDB database (replace with your connection string)
 const mongoUri = 'mongodb://localhost:27017/medical'; // Replace with your actual connection string

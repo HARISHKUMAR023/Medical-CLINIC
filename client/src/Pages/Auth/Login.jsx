@@ -48,7 +48,7 @@ const Login = () => {
 
       // console.log('Login successful:', response.data);
        const user ={
-        
+         name:response.data.name,
          email:response.data.email,
          token : response.data.token,
          usertype:response.data.roles
@@ -59,7 +59,7 @@ const Login = () => {
       // const { usernames, token } = response.data;
       // const { usernames, token } = response.data;
 
-      dispatch(loginSuccess({email:response.data.email, token: response.data.token , usertype:response.data.roles.role}));
+      dispatch(loginSuccess({name:response.data.name,email:response.data.email, token: response.data.token , usertype:response.data.roles.role, permissions:response.data.roles.permissions}));
 
       console.log("Login successful");
      
