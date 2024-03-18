@@ -12,6 +12,7 @@ import {  useSelector } from 'react-redux';
 import Adminuser from './Pages/Admin/adminuser/Adminuser';
 import Manufacturer from './Pages/Master/Manufacturer/Manufacturer';
 import Products from './Pages/Master/Products/Products';
+import FinancialYear from './Pages/Master/FinancialYear/FinancialYear';
 const Layout = () => {
   const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn )
   if (!isLoggedIn) {
@@ -60,7 +61,7 @@ const router = createBrowserRouter([
       },
       {
         path: "FinancialYear",
-        element: <Adminuser />,
+        element: <FinancialYear  />,
       },
       {
         path: "Products",

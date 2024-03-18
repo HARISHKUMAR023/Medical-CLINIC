@@ -62,7 +62,9 @@ console.log(loginusername)
 
     
     try {
-      const response = await axios.post('http://localhost:5000/api/register', postData, {
+      const baseURL = import.meta.env.VITE_BASE_URL;
+      const url = `${baseURL}register`;
+      const response = await axios.post(url, postData, {
         headers: {
           'Content-Type': 'multipart/form-data' // Set content type to multipart/form-data for file upload
         }
@@ -94,7 +96,7 @@ console.log(loginusername)
           </label>
         
           <input
-            className=" border border-gray-300 p-2 py-4 rounded"
+            className=" border border-gray-300 p-2 py-4 rounded w-80"
             type="text"
             id="name"
             name="name"
@@ -109,18 +111,18 @@ console.log(loginusername)
     Mobile Number <span className='text-rose-400'>*</span>
   </label>
   <div className="relative">
-    <span className="absolute inset-y-0 left-0 px-3 py-4 text-center rounded  text-white" style={{backgroundColor:'#999999'}}>+91</span>
-    <input
-      className="border border-gray-300 p-2 py-4 pl-14 rounded"
-      type="text"
-      id="mobile"
-      name="mobile"
-      value={formData.mobile}
-      onChange={handleChange}
-      required
-      placeholder='95005 00550'
-    />
-  </div>
+  <span className="absolute inset-y-0 left-0 px-4 py-2 text-center rounded text-white" style={{backgroundColor:'#999999'}}>+91</span>
+  <input
+    className="border border-gray-300 p-2 pl-16 rounded w-80"
+    type="text"
+    id="mobile"
+    name="mobile"
+    value={formData.mobile}
+    onChange={handleChange}
+    required
+    placeholder='95005 00550'
+  />
+</div>
 </div>
 
        
@@ -129,7 +131,7 @@ console.log(loginusername)
             Role <span className='text-rose-400'>*</span> 
           </label>
           <select
-                className='border border-gray-300 pr-48 bg-white p-2 py-4 rounded'
+                className='border border-gray-300  bg-white p-2 py-4 rounded w-80'
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
@@ -157,7 +159,7 @@ console.log(loginusername)
           </label>
      
           <input
-            className=" border border-gray-300 p-2 py-4 rounded"
+            className=" border border-gray-300 p-2 py-4 rounded w-80"
             type="email"
             id="email"
             name="email"
@@ -174,7 +176,7 @@ console.log(loginusername)
           </label>
      
           <input
-            className=" border border-gray-300 p-2 py-4 rounded"
+            className=" border border-gray-300 p-2 py-4 rounded w-80"
             type="password"
             id="password"
             name="password"
@@ -190,7 +192,7 @@ console.log(loginusername)
           </label>
      
           <input
-            className=" border border-gray-300 p-2 py-4 rounded"
+            className=" border border-gray-300 p-2 py-4 rounded w-80"
             type="password"
             id="confirmPassword"
             name="confirmPassword"
