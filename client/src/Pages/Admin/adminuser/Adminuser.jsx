@@ -27,7 +27,9 @@ const Adminuser = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/getuser');
+      const baseURL = import.meta.env.VITE_BASE_URL;
+      const url = `${baseURL}getuser`;
+      const response = await axios.get(url);
       setData(response.data);
     } catch (error) {
       console.error('Error fetching user data', error);

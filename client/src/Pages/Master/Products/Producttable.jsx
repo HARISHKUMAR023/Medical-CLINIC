@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Switch, { switchClasses } from '@mui/joy/Switch';
 import Box from '@mui/material/Box';
@@ -10,14 +10,15 @@ import { MdOutlineFormatListBulleted } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import Createuser from './Createuser';
+
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import Deletepop from '../../../components/Deletepop/Deletepop';
 import axios from 'axios';
+import CreateProduct from './CreateProduct';
 
-const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
-  const [showPopup, setShowPopup] = useState(false);
+const Producttable = ({ data, columns, pageSize, onDataRefresh }) => {
+    const [showPopup, setShowPopup] = useState(false);
   const [checkedRows, setCheckedRows] = useState({});
   const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,7 +50,7 @@ const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
   const handleDeleteConfirmed = async () => {
     try {
       const baseURL = import.meta.env.VITE_BASE_URL;
-      const url = `${baseURL}users/${itemToDeleteId}`;
+      const url = `${baseURL}products/${itemToDeleteId}`;
       await axios.delete(url);
       onDataRefresh();
       setShowPopUp(false);
@@ -63,10 +64,10 @@ const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
     console.log('Cancelled');
     setShowPopUp(false);
   };
-
   return (
-    <div className='h-auto mx-2'>
-      {showPopup && <Createuser onClose={togglePopup} onDataRefresh={onDataRefresh}/>}
+    <div>
+ <div className='h-auto mx-2'>
+      {showPopup && <CreateProduct onClose={togglePopup} onDataRefresh={onDataRefresh}/>}
       <div className="container mx-auto p-4 bg-white z-10">
         <div className='flex justify-between mb-4'>
           <div className='flex items-center'>
@@ -106,13 +107,12 @@ const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
               <tr key={index} className="hover:bg-gray-100 shadow-sm py-3 rounded-md">
                 {columns.map((column) => (
                   <td key={column.key} className="py-2 px-4 font-light">
-                    {column.key === 'profilePic' ? (
-                      <img src={`http://localhost:5000/uploads/profiles/${row[column.key] || 'default-profile.png'}`} alt="Profile" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '50%' }} />
-                    ) : column.key === 'nameAndEmail' ? (
+                    {column.key === 'productPic' ? (
+                      <img src={`http://localhost:5000/uploads/productfile/${row[column.key] || 'default-profile.png'}`} alt="productPic" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '50%' }} />
+                    ) : column.key === 'name' ? (
                       <div>
                         <div>{row.name}</div>
-                        <div>{row.email}</div>
-                        <div>{row.mobile}</div>
+                      
                       </div>
                     ) : (
                       row[column.key]
@@ -179,14 +179,14 @@ const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
         </div>
       </div>
     </div>
-  );
-};
 
-AdminTable.propTypes = {
-  data: PropTypes.array.isRequired,
-  columns: PropTypes.array.isRequired,
-  pageSize: PropTypes.number.isRequired,
-  onDataRefresh: PropTypes.func.isRequired
-};
-
-export default AdminTable;
+    </div>
+  )
+}
+Producttable.propTypes = {
+    data: PropTypes.array.isRequired,
+    columns: PropTypes.array.isRequired,
+    pageSize: PropTypes.number.isRequired,
+    onDataRefresh: PropTypes.func.isRequired
+  };
+export default Producttable
