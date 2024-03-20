@@ -3,6 +3,7 @@ import axios from 'axios';
 import { CgCloseR } from "react-icons/cg";
 import PropTypes from 'prop-types';
 import { useSelector } from "react-redux";
+import { toast, ToastContainer } from 'react-toastify';
 
 
 import TextField from '@mui/material/TextField';
@@ -51,16 +52,20 @@ const CreateRols = ({ onClose, onDataRefresh }) => {
       const baseURL = import.meta.env.VITE_BASE_URL;
       const url = `${baseURL}roles`;
       const response = await axios.post(url, postData);
-      console.log(response.data);
-      onClose();
-      onDataRefresh();
+      toast.success(response.data.message);
+      setTimeout(() => {
+          onClose();
+          onDataRefresh();
+        }, 3000);
     } catch (error) {
       console.error("Error creating role:", error);
+      toast.error(error.response.data.message)
     }
   };
 
   return (
     <div className="fixed inset-0 flex justify-end bg-gray-800 bg-opacity-75 z-50">
+       <ToastContainer />
       <div className="bg-white rounded-lg w-3/12">
         <div className="flex justify-between items-center mb-4 p-4 table-head">
           <h2 className="text-2xl font-bold">Create Roles</h2>
@@ -73,6 +78,7 @@ const CreateRols = ({ onClose, onDataRefresh }) => {
           </button>
         </div>
         <form onSubmit={handleSubmit}>
+          
           <div className="mx-3">
             <TextField
               id="Role"
@@ -100,11 +106,10 @@ const CreateRols = ({ onClose, onDataRefresh }) => {
             ))}
           </div>
 
-          <div
-            className="mb-4 pr-3 absolute bottom-0 right-0"
-            style={{ backgroundColor: "#F4F4F4" }}
+          <div className=''
+           
           >
-            <div>
+            <div className='pr-3 absolute bottom-0 right-0  bg-gray-200  rounded-md w-3/12 h-auto   py-3 flex justify-end'>
               <button
                 type="reset"
                 className="border-2 text-teal-400 font-bold py-2 px-4 rounded mr-3 reset-color"

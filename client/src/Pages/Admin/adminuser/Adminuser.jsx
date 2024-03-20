@@ -12,7 +12,7 @@ const columns = [
   { key: 'nameAndEmail', title: 'Name' },
  
   { key: 'createdAt', title: 'Created at' },
-  { key: 'createdBy', title: 'createdBy' },
+  { key: 'createdBy', title: 'CreatedBy' },
   
 
 ];

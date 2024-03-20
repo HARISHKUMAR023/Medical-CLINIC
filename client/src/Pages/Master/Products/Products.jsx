@@ -7,7 +7,7 @@ const columns = [
   { key: 'productPic', title: 'Image' },
   { key: 'name', title: 'Name' },
  
-  { key: 'createdAt', title: 'Created at' },
+  { key: 'createdAt', title: 'Createdat' },
   { key: 'createdBy', title: 'createdBy' },
   
 

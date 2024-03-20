@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Switch, { switchClasses } from '@mui/joy/Switch';
 import Box from '@mui/material/Box';
@@ -27,28 +27,65 @@ const ManufacturerTable = ({ data, columns, pageSize, onDataRefresh }) => {
   const paginatedData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const totalRecordsPerPage = paginatedData.length;
   const [showPopUp, setShowPopUp] = useState(false);
+  const [editData, setEditData] = useState(null); 
 
+
+
+// Update checkedRows state when data prop changes
+useEffect(() => {
+  const initialCheckedRows = {};
+  data.forEach((item, index) => {
+    initialCheckedRows[index] = item.active; // Assuming the 'active' property indicates the product's active/inactive status
+  });
+  setCheckedRows(initialCheckedRows);
+}, [data]);
+  
+
+const handleSwitchChange = (rowIndex, isChecked) => {
+  setCheckedRows((prevCheckedRows) => ({
+    ...prevCheckedRows,
+    [rowIndex]: isChecked,
+  }));
+  const productId = data[rowIndex]._id; // Assuming _id is the unique identifier for each product
+  handleToggleProduct(productId, isChecked);
+};
+
+
+const handleToggleProduct = async (manufacturerid, isActive) => {
+  try {
+    const url = `${import.meta.env.VITE_BASE_URL}/manufacturer/${manufacturerid}/toggle`;
+    await axios.put(url, { active: isActive });
+    onDataRefresh();
+  } catch (error) {
+    console.error('Error toggling product status:', error);
+    alert('Error toggling product status');
+  }
+};
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  const handleSwitchChange = (rowIndex, isChecked) => {
-    setCheckedRows((prevCheckedRows) => ({
-      ...prevCheckedRows,
-      [rowIndex]: isChecked,
-    }));
-  };
 
+  const handleEdit = (rowData) => {
+    // Set the data to edit and open the toggle popup
+    setEditData(rowData);
+    setShowPopup(true);
+  }
   const togglePopup = () => {
     setShowPopup(!showPopup);
+    // Clear edit data when closing the popup
+    if (!showPopup) setEditData(null);
   };
+
 
   const handleDelete = async (id) => {
+    // Show the delete confirmation pop-up
     setShowPopUp(true);
+  
+    // Set the ID of the item to be deleted
     setItemToDeleteId(id);
   };
-
   const handleDeleteConfirmed = async () => {
     try {
       const baseURL = import.meta.env.VITE_BASE_URL;
@@ -66,10 +103,19 @@ const ManufacturerTable = ({ data, columns, pageSize, onDataRefresh }) => {
     console.log('Cancelled');
     setShowPopUp(false);
   };
+
+  
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+};
   return (
     <div>
  <div className='h-auto mx-2'>
-      {showPopup && <CreateManufacturer  onClose={togglePopup} onDataRefresh={onDataRefresh}/>}
+      {showPopup && <CreateManufacturer  onClose={togglePopup} onDataRefresh={onDataRefresh}  editData={editData}/>}
       <div className="container mx-auto p-4 bg-white z-10">
         <div className='flex justify-between mb-4'>
           <div className='flex items-center'>
@@ -117,36 +163,40 @@ const ManufacturerTable = ({ data, columns, pageSize, onDataRefresh }) => {
                       
                       </div>
                     ) : (
-                      row[column.key]
+                      column.key === 'createdAt' || column.key === 'endDate' ? formatDate(row[column.key]) : row[column.key]
                     )}
                   </td>
                 ))}
-                <td className='py-2 px-4 flex items-center'>
-                  <Switch
-                    color={checkedRows[index] ? 'success' : 'danger'}
-                    checked={checkedRows[index] || false}
-                    onChange={(event) => handleSwitchChange(index, event.target.checked)}
-                    sx={{
-                      paddingTop:'5px',
-                      '--Switch-thumbSize': '12px',
-                      '--Switch-trackWidth': '30px',
-                      '--Switch-trackHeight': '18px',
-                      '--Switch-trackBackground': '#FF3838',
-                      '&:hover': {
+ <td className='py-2 px-4 flex items-center'>
+                    <Switch
+                      color={checkedRows[index] ? 'success' : 'danger'}
+                      checked={checkedRows[index] || false}
+                      onChange={(event) => handleSwitchChange(index, event.target.checked)}
+                      sx={{
+                         paddingTop: '40px',
+                        '--Switch-thumbSize': '12px',
+                        '--Switch-trackWidth': '30px',
+                        '--Switch-trackHeight': '18px',
                         '--Switch-trackBackground': '#FF3838',
-                      },
-                      [`&.${switchClasses.checked}`]: {
-                        '--Switch-trackBackground': '#2CA302',
                         '&:hover': {
-                          '--Switch-trackBackground': '#2CA302',
+                          '--Switch-trackBackground': '#FF3838',
                         },
-                      },
-                    }}
-                  />
-                  {checkedRows[index] ? <span className='pl-3 text-green-600 text-center mt-1.5'>Active</span> : <span className='pl-3 text-red-600 text-center mt-1.5'>Inactive</span>}
-                </td>
+                        [`&.${switchClasses.checked}`]: {
+                          '--Switch-trackBackground': '#2CA302',
+                          '&:hover': {
+                            '--Switch-trackBackground': '#2CA302',
+                          },
+                        },
+                      }}
+                    />
+                    {checkedRows[index] ? (
+                      <span className='pl-3 text-green-600 text-center mt-10'>Active</span>
+                    ) : (
+                      <span className='pl-3 text-red-600 text-center mt-10'>Inactive</span>
+                    )}
+                  </td>
                 <td className="py-2 px-4 ">
-                  <button className="px-2 py-1 mr-2 rounded" onClick={() => handleEdit(row)}>
+                  <button className="px-2 py-1 mr-2 rounded"  onClick={() => handleEdit(row)}>
                     <FaEdit className='w-6 h-8'/>
                   </button>
                   <button className="px-2 py-1 mr-2 rounded hover:text-red-500" onClick={() => handleDelete(row._id)}>

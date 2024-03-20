@@ -112,7 +112,7 @@ const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
        checked={checkedRows[index] || false}
        onChange={(event) => handleSwitchChange(index, event.target.checked)}
       sx={{
-         paddingTop:'5px',
+         paddingTop:'4px',
         '--Switch-thumbSize': '12px',
         '--Switch-trackWidth': '30px',
         '--Switch-trackHeight': '18px',
@@ -128,7 +128,7 @@ const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
         },
       }}
     />
-      {checkedRows[index] ? <span className='pl-3 text-green-600 text-center mt-1.5'>Active</span> : <span className='pl-3 text-red-600 text-center mt-1.5'>Inactive</span>}
+      {checkedRows[index] ? <span className='pl-3 text-green-600 text-center mt-1'>Active</span> : <span className='pl-3 text-red-600 text-center mt-1'>Inactive</span>}
               </td>
               
               <td className="py-2 px-4 ">

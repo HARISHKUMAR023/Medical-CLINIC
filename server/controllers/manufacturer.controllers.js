@@ -106,4 +106,77 @@ const getAllmanufacturer= async (req, res) => {
       res.status(500).json({ message: 'Error deleting product', error: err.message });
     }
   };  
-module.exports = { manufacturer , getAllmanufacturer ,deletemanufacturer};
+
+
+  const updateManufacturer = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updatedData = {}; // Object to store updated data
+    
+      // Extract fields from the request body
+      const { name, createdBy, manufacturerPic } = req.body;
+      console.log('Request Body:', req.body);
+
+      // Check if the 'name' field is provided and is a string
+      if (name && typeof name === 'string') {
+        updatedData.name = name;
+      }
+    
+      // Check if the 'createdBy' field is provided and is a string
+      if (createdBy && typeof createdBy === 'string') {
+        updatedData.createdBy = createdBy;
+      }
+    
+      // If 'manufacturerPic' is provided, update it
+      if (manufacturerPic) {
+        updatedData.manufacturerPic = manufacturerPic;
+      }
+    
+      // Find and update the manufacturer by ID
+      const manufacturer = await Manufacturer.findByIdAndUpdate(id, updatedData, {
+        new: true, // Return the updated document
+        runValidators: true // Run validators for schema validation
+      });
+    
+      // Check if the manufacturer exists
+      if (!manufacturer) {
+        return res.status(404).json({ success: false, error: 'Manufacturer not found' });
+      }
+    
+      // Send a success response with the updated manufacturer data
+      res.status(200).json({ success: true, data: manufacturer, message: 'Manufacturer updated successfully' });
+    } catch (error) {
+      // Handle server errors
+      console.error('Error updating manufacturer:', error);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+  };
+  
+  module.exports = { updateManufacturer };
+  
+  
+// Activate or deactivate a product
+const togglemanufacturer = async (req, res) => {
+  try {
+    const  manufacturerid = req.params.id;
+
+    // Find the product by ID
+    const  manufacturer= await Manufacturer.findById(manufacturerid);
+
+    if (!manufacturer) {
+      return res.status(404).json({ message: ' manufacturer not found' });
+    }
+
+    // Toggle the active status
+    manufacturer.active = !manufacturer.active;
+
+    // Save the updated product
+    await manufacturer.save();
+
+    res.status(200).json({ message: 'manufacturer status toggled successfully', manufacturer });
+  } catch (err) {
+    console.error('Error toggling manufacturer status:', err);
+    res.status(500).json({ message: 'Error toggling manufacturer status', error: err.message });
+  }
+};
+module.exports = { manufacturer , getAllmanufacturer ,deletemanufacturer,updateManufacturer,togglemanufacturer };
