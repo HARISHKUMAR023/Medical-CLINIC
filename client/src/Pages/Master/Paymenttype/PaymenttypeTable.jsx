@@ -1,4 +1,4 @@
-import FinancialYearForm from "./FinancialYearForm"
+import CreatePaymenttype from './CreatePaymenttype';
 // Table.js
 
 import  { useState,useEffect } from 'react';
@@ -6,15 +6,18 @@ import PropTypes from 'prop-types';
 
 import Switch, { switchClasses } from '@mui/joy/Switch';
 
+// import del from "../../assets/images/icons/tableicone/delete.svg";
+// import * as React from 'react';
 import Box from '@mui/material/Box';
-
+// import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import { BsFilterLeft } from "react-icons/bs";
 import { LuFilter } from "react-icons/lu";
 import { MdOutlineFormatListBulleted } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
-
+// import { GrNext } from "react-icons/gr";
+// import { GrPrevious } from "react-icons/gr";
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -23,7 +26,7 @@ import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 
-const FinancialYearTable = ({ data, columns, pageSize,onDataRefresh  }) => {
+const PaymenttypeTable = ({ data, columns, pageSize,onDataRefresh  }) => {
     const [showPopup, setShowPopup] = useState(false);
     const [checkedRows, setCheckedRows] = useState({});
     const [itemToDeleteId, setItemToDeleteId] = useState(null);
@@ -53,19 +56,19 @@ const handleSwitchChange = (rowIndex, isChecked) => {
     ...prevCheckedRows,
     [rowIndex]: isChecked,
   }));
-  const FinancialYearid = data[rowIndex]._id; // Assuming _id is the unique identifier for each product
-  handleToggleProduct(FinancialYearid, isChecked);
+  const paymenttypeid = data[rowIndex]._id; // Assuming _id is the unique identifier for each product
+  handleToggleProduct(paymenttypeid, isChecked);
 };
 
  
-const handleToggleProduct = async (FinancialYearid, isActive) => {
+const handleToggleProduct = async (paymenttypeid, isActive) => {
   try {
-    const url = `${import.meta.env.VITE_BASE_URL}/financial-years/${FinancialYearid}/toggle`;
+    const url = `${import.meta.env.VITE_BASE_URL}/Paymenttype/${paymenttypeid}/toggle`;
     await axios.put(url, { active: isActive });
     onDataRefresh();
   } catch (error) {
-    console.error('Error toggling finacial  status:', error);
-    alert('Error toggling finacail status');
+    console.error('Error toggling paymenttype status:', error);
+    alert('Error toggling paymenttype status');
   }
 };
 
@@ -91,7 +94,7 @@ const handleToggleProduct = async (FinancialYearid, isActive) => {
     try {
       // Perform the delete action using the ID stored in state
       const baseURL = import.meta.env.VITE_BASE_URL;
-      const url = `${baseURL}financial-years/${itemToDeleteId}`;
+      const url = `${baseURL}Paymenttype/${itemToDeleteId}`;
       await axios.delete(url);
       // Refresh data
       onDataRefresh();
@@ -135,7 +138,7 @@ const handleToggleProduct = async (FinancialYearid, isActive) => {
   return (
     <div  className='h-auto mx-2'>
       
-       {showPopup  && < FinancialYearForm  onClose={togglePopup} onDataRefresh={onDataRefresh}    editData={editData} />}
+       {showPopup  && <CreatePaymenttype  onClose={togglePopup} onDataRefresh={onDataRefresh}    editData={editData} />}
     <div className="container mx-auto p-4  bg-white">
       <div className='flex justify-between mb-4'>
         <div className='flex items-center ' >
@@ -284,10 +287,10 @@ const handleToggleProduct = async (FinancialYearid, isActive) => {
    
   )
 }
-FinancialYearTable.propTypes = {
+PaymenttypeTable.propTypes = {
     data: PropTypes.array.isRequired,
     columns: PropTypes.array.isRequired,
     pageSize: PropTypes.number.isRequired,
     onDataRefresh: PropTypes.func.isRequired
   };
-export default FinancialYearTable
+export default PaymenttypeTable

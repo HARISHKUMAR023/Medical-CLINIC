@@ -46,7 +46,11 @@ const register = async (req, res) => {
       if (password !== confirmPassword) {
         return res.status(400).json({ message: 'Passwords do not match' });
       }
-
+// Check if the email already exists
+const existingUser = await User.findOne({ email });
+if (existingUser) {
+  return res.status(400).json({ message: 'Email already exists' });
+}
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -59,7 +63,8 @@ const register = async (req, res) => {
           defaultUserRole = await newDefaultUserRole.save();
         } catch (error) {
           console.error('Error creating default user role:', error);
-          throw new Error('Error creating default user role');
+          return res.status(400).json({ message: 'Error creating default user role' });
+          // throw new Error('Error creating default user role');
         }
       }
 

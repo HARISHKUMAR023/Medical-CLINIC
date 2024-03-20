@@ -106,4 +106,30 @@ const getAllProducts = async (req, res) => {
       res.status(500).json({ message: 'Error deleting product', error: err.message });
     }
   };  
-module.exports = { product , getAllProducts ,deleteProduct };
+
+
+// Activate or deactivate a product
+const toggleProductStatus = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    // Find the product by ID
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Toggle the active status
+    product.active = !product.active;
+
+    // Save the updated product
+    await product.save();
+
+    res.status(200).json({ message: 'Product status toggled successfully', product });
+  } catch (err) {
+    console.error('Error toggling product status:', err);
+    res.status(500).json({ message: 'Error toggling product status', error: err.message });
+  }
+};
+module.exports = { product , getAllProducts ,deleteProduct , toggleProductStatus };

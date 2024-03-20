@@ -34,18 +34,21 @@ const CreateProduct = ({ onClose, onDataRefresh }) => {
     try {
       const baseURL = import.meta.env.VITE_BASE_URL;
       const url = `${baseURL}products`;
-      await axios.post(url, postData, {
+     const response =  await axios.post(url, postData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       
-      onClose();
-      onDataRefresh();
-      toast.success('Product created successfully!');
+    
+      toast.success(response.data.message);
+      setTimeout(() => {
+        onClose();
+        onDataRefresh();
+      }, 3000);
     } catch (error) {
       console.error('Error creating product:', error);
-      toast.error('Failed to create product.');
+      toast.error(error.response.data.message)
     }
   };
   

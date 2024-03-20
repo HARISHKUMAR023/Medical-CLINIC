@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import PropTypes from 'prop-types';
 import Switch, { switchClasses } from '@mui/joy/Switch';
 import Box from '@mui/material/Box';
@@ -31,12 +31,26 @@ const Producttable = ({ data, columns, pageSize, onDataRefresh }) => {
     setCurrentPage(page);
   };
 
-  const handleSwitchChange = (rowIndex, isChecked) => {
-    setCheckedRows((prevCheckedRows) => ({
-      ...prevCheckedRows,
-      [rowIndex]: isChecked,
-    }));
-  };
+// Update checkedRows state when data prop changes
+useEffect(() => {
+  const initialCheckedRows = {};
+  data.forEach((item, index) => {
+    initialCheckedRows[index] = item.active; // Assuming the 'active' property indicates the product's active/inactive status
+  });
+  setCheckedRows(initialCheckedRows);
+}, [data]);
+  
+
+const handleSwitchChange = (rowIndex, isChecked) => {
+  setCheckedRows((prevCheckedRows) => ({
+    ...prevCheckedRows,
+    [rowIndex]: isChecked,
+  }));
+  const productId = data[rowIndex]._id; // Assuming _id is the unique identifier for each product
+  handleToggleProduct(productId, isChecked);
+};
+
+ 
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
@@ -64,6 +78,25 @@ const Producttable = ({ data, columns, pageSize, onDataRefresh }) => {
     console.log('Cancelled');
     setShowPopUp(false);
   };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
+const handleToggleProduct = async (productId, isActive) => {
+  try {
+    const url = `${import.meta.env.VITE_BASE_URL}/products/${productId}/toggle`;
+    await axios.put(url, { active: isActive });
+    onDataRefresh();
+  } catch (error) {
+    console.error('Error toggling product status:', error);
+    alert('Error toggling product status');
+  }
+};
   return (
     <div>
  <div className='h-auto mx-2'>
@@ -107,42 +140,45 @@ const Producttable = ({ data, columns, pageSize, onDataRefresh }) => {
               <tr key={index} className="hover:bg-gray-100 shadow-sm py-3 rounded-md">
                 {columns.map((column) => (
                   <td key={column.key} className="py-2 px-4 font-light">
-                    {column.key === 'productPic' ? (
+                  {column.key === 'productPic' ? (
                       <img src={`http://localhost:5000/uploads/productfile/${row[column.key] || 'default-profile.png'}`} alt="productPic" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '50%' }} />
-                    ) : column.key === 'name' ? (
+                  ) : column.key === 'name' ? (
                       <div>
-                        <div>{row.name}</div>
-                      
+                          <div>{row.name}</div>
                       </div>
+                  ) : (
+                      column.key === 'createdAt' || column.key === 'endDate' ? formatDate(row[column.key]) : row[column.key]
+                  )}
+              </td>
+                ))}
+ <td className='py-2 px-4 flex items-center'>
+                    <Switch
+                      color={checkedRows[index] ? 'success' : 'danger'}
+                      checked={checkedRows[index] || false}
+                      onChange={(event) => handleSwitchChange(index, event.target.checked)}
+                      sx={{
+                         paddingTop: '10px',
+                        '--Switch-thumbSize': '12px',
+                        '--Switch-trackWidth': '30px',
+                        '--Switch-trackHeight': '18px',
+                        '--Switch-trackBackground': '#FF3838',
+                        '&:hover': {
+                          '--Switch-trackBackground': '#FF3838',
+                        },
+                        [`&.${switchClasses.checked}`]: {
+                          '--Switch-trackBackground': '#2CA302',
+                          '&:hover': {
+                            '--Switch-trackBackground': '#2CA302',
+                          },
+                        },
+                      }}
+                    />
+                    {checkedRows[index] ? (
+                      <span className='pl-3 text-green-600 text-center mt-3'>Active</span>
                     ) : (
-                      row[column.key]
+                      <span className='pl-3 text-red-600 text-center mt-3'>Inactive</span>
                     )}
                   </td>
-                ))}
-                <td className='py-2 px-4 flex items-center'>
-                  <Switch
-                    color={checkedRows[index] ? 'success' : 'danger'}
-                    checked={checkedRows[index] || false}
-                    onChange={(event) => handleSwitchChange(index, event.target.checked)}
-                    sx={{
-                      paddingTop:'5px',
-                      '--Switch-thumbSize': '12px',
-                      '--Switch-trackWidth': '30px',
-                      '--Switch-trackHeight': '18px',
-                      '--Switch-trackBackground': '#FF3838',
-                      '&:hover': {
-                        '--Switch-trackBackground': '#FF3838',
-                      },
-                      [`&.${switchClasses.checked}`]: {
-                        '--Switch-trackBackground': '#2CA302',
-                        '&:hover': {
-                          '--Switch-trackBackground': '#2CA302',
-                        },
-                      },
-                    }}
-                  />
-                  {checkedRows[index] ? <span className='pl-3 text-green-600 text-center mt-1.5'>Active</span> : <span className='pl-3 text-red-600 text-center mt-1.5'>Inactive</span>}
-                </td>
                 <td className="py-2 px-4 ">
                   <button className="px-2 py-1 mr-2 rounded" onClick={() => handleEdit(row)}>
                     <FaEdit className='w-6 h-8'/>

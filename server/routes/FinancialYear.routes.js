@@ -8,5 +8,5 @@ router.get('/financial-years', FinancialYearControllers.getAllFinancialYears);
 router.get('/financial-years/:id',FinancialYearControllers.getFinancialYearById);
 router.put('/financial-years/:id',FinancialYearControllers.updateFinancialYear);
 router.delete('/financial-years/:id',FinancialYearControllers.deleteFinancialYear);
-
+router.put('/financial-years/:id/toggle', FinancialYearControllers.toggleFinancialYear);
 module.exports = router;

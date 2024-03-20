@@ -5,10 +5,14 @@ import './Createuser.css';
 import user from '../../../assets/images/icons/formicone/user.png';
 import PropTypes from 'prop-types';
 import { useSelector  } from "react-redux";
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 const Createuser = ({ onClose , onDataRefresh}) => {
   const  loginusername = useSelector((state) => state.auth.user.name)
 console.log(loginusername)
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,12 +26,14 @@ console.log(loginusername)
   // const [errors, setErrors] = useState({});
   useEffect(() => {
     // Fetch roles from API
-    axios.get('http://localhost:5000/api/roles')
+  axios.get('http://localhost:5000/api/roles')
       .then(response => {
         setRoles(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
+        toast.error(error.response.data.message);
+        console.log("this is the data in ressponse"+error.response.data.message)
       });
   }, []);
 
@@ -38,6 +44,10 @@ console.log(loginusername)
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
+  };
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
   
   const handleSubmit = async (e) => {
@@ -56,10 +66,14 @@ console.log(loginusername)
     if (formData.mobile.length !== 10) {
       errors.mobile = 'Mobile number must be 10 digits';
     }
-    if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
+    // if (formData.password !== formData.confirmPassword) {
+    //   errors.confirmPassword = 'Passwords do not match';
+    //   toast.error('Passwords do not match')
+    // }
+    if (!validateEmail(formData.email)) {
+      toast.error('Please provide a valid email address.');
+      return;
     }
-
     
     try {
       const baseURL = import.meta.env.VITE_BASE_URL;
@@ -69,17 +83,28 @@ console.log(loginusername)
           'Content-Type': 'multipart/form-data' // Set content type to multipart/form-data for file upload
         }
       });
-      console.log(response.data);
-      onClose()
-      onDataRefresh()
+      // console.log(response.data);
+    
+        // Display success toast notification
+        toast.success(response.data.message);
+
+    // Close the modal after a short delay (e.g., 1 second)
+    setTimeout(() => {
+      onClose();
+      onDataRefresh();
+    }, 3000);
     } catch (error) {
       console.error('Error registering user:', error);
+      toast.error(error.response.data.message)
+      console.log("this is the data in ressponse"+error.response.data.message)
     }
   };
   
   return (
     // absolute right-0  z-50 top-0 bg-black h-12/12 w-6/12
+    
     <div className="fixed inset-0 flex  justify-end bg-gray-800 bg-opacity-75 z-50    ">
+ <ToastContainer />
     <div className="bg-white rounded-lg w-6/12">
       <div className="flex justify-between items-center mb-4 p-4 table-head">
         <h2 className="text-2xl font-bold">Create Admin User</h2>
@@ -130,7 +155,23 @@ console.log(loginusername)
         <label className="block text-gray-500 text-sm font-medium " htmlFor="Phone">
             Role <span className='text-rose-400'>*</span> 
           </label>
-          <select
+          <Autocomplete  className=' rounded w-80'
+      options={roles}
+      value={formData.role}
+      onChange={(event, newValue) => {
+        handleChange({ target: { name: 'role', value: newValue }});
+      }}
+      getOptionLabel={(option) => option.role}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          // label="Select Role"
+          variant="outlined"
+        />
+      )}
+    />
+          
+           {/* <select
                 className='border border-gray-300  bg-white p-2 py-4 rounded w-80'
                 name="role"
                 value={formData.role}
@@ -141,7 +182,8 @@ console.log(loginusername)
                 {roles.map(role => (
                   <option key={role._id} value={role.role}>{role.role}</option>
                 ))}
-              </select>
+              </select>  */}
+              
           {/* <input
             className=" border border-gray-300 p-2 py-4 rounded"
             type="text"
@@ -237,8 +279,8 @@ console.log(loginusername)
   </div>
 </div>
 
-        <div className="mb-4  pr-3 absolute bottom-0 right-0  " style={{backgroundColor:'#F4F4F4'}}>
-          <div>
+        <div >
+          <div className='pr-3 absolute bottom-0 right-0  bg-gray-200  rounded-md w-6/12 h-auto   py-3 flex justify-end'>
           <button
             type="reset"
             className="border-2    text-teal-400 font-bold py-2 px-4 rounded mr-3 reset-color" style={{borderColor:'#00BBD1', color:'#00BBD1'}}

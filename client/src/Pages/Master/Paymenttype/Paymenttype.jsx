@@ -1,17 +1,16 @@
-import FinancialYearTable from "./FinancialYearTable";
+import PaymenttypeTable from './PaymenttypeTable';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
 const columns = [
     { key: 'title', title: 'Title' },
-    { key: 'startDate', title: 'StartDate' },
-    { key: 'endDate', title: 'EndDate' },
+
     { key: 'createdBy', title: 'CreatedBy' },
 ];
 // const baseURL = import.meta.env.VITE_BASE_URL;
 // console.log('Base URL:', baseURL);
-const FinancialYear = () => {
+const Paymenttype = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -21,7 +20,7 @@ const FinancialYear = () => {
     const fetchData = async () => {
         try {
             const baseURL = import.meta.env.VITE_BASE_URL;
-            const url = `${baseURL}financial-years`;
+            const url = `${baseURL}Paymenttype`;
             
         
         const response = await axios.get(url);
@@ -41,13 +40,12 @@ const FinancialYear = () => {
 
     return (
         <div>
-            <FinancialYearTable data={data} columns={columns} pageSize={8} onDataRefresh={handleDataRefresh} />
+            <PaymenttypeTable data={data} columns={columns} pageSize={8} onDataRefresh={handleDataRefresh} />
         </div>
     );
 };
-
-FinancialYear.propTypes = {
+Paymenttype.propTypes = {
     onDataRefresh: PropTypes.func.isRequired
 };
 
-export default FinancialYear;
+export default Paymenttype;

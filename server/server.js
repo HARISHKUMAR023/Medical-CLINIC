@@ -10,6 +10,8 @@ const FinancialYearControllers = require('./routes/FinancialYear.routes');
 const manufacturerController = require('./routes/manufacturer.routes')
 
 const Product = require('./routes/Product.routes');
+const Paymenttype = require('./routes/paymenttype.routes')
+const supplierRoutes = require('./routes/suppliers.routes');
 const app = express();
 require('dotenv').config();
 
@@ -43,6 +45,8 @@ app.use('/api/', userRoutes);
  app.use('/api/',FinancialYearControllers)
  app.use('/api/',Product)
  app.use('/api/', manufacturerController)
+ app.use('/api/',Paymenttype)
+ app.use('/api', supplierRoutes);
 // Add other route handler mappings here
 
 // Serve static assets in production (optional)
