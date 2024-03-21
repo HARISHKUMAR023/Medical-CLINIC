@@ -31,6 +31,13 @@ const fileFilter = (req, file, cb) => {
 
 let upload = multer({ storage, fileFilter }).single('profilePic'); // Single file upload with the field name 'profileImage'
 
+/**
+ * Register a new user.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the user is created successfully.
+ */
 const register = async (req, res) => {
   try {
     // Handle file upload

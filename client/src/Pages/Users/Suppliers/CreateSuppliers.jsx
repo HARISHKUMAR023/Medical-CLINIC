@@ -5,7 +5,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
 import { CgCloseR } from 'react-icons/cg';
-
+import stateAndCityData from '../../../assets/json/state.json';
+import Select from 'react-select';
+import "./customstyle.css";
 const CreateSuppliers = ({ onClose, refetchSuppliers, editData }) => {
   const loginusername = useSelector((state) => state.auth.user.name);
   const [formData, setFormData] = useState({
@@ -142,50 +144,64 @@ const CreateSuppliers = ({ onClose, refetchSuppliers, editData }) => {
 
        
           <div className='mx-3 mt-6'>
-            <label className="block text-gray-500 text-sm font-medium mb-2" htmlFor="country">
-            Country<span className='text-rose-400'>*</span>
-            </label>
-            <input
-              className="border border-gray-300 p-2 py-4 rounded w-80"
-              type="text"
-              id="country"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              required
-              placeholder='Country'
-            />
-          </div>
+  <label className="block text-gray-500 text-sm font-medium mb-2" htmlFor="country">
+    Country<span className='text-rose-400'>*</span>
+  </label>
+  <Select
+    value={{ value: formData.country || 'India', label: 'India' }}
+    onChange={(selectedOption) => setFormData({ ...formData, country: selectedOption.value })}
+    options={[{ value: 'India', label: 'India' }]}
+    placeholder="Select Country"
+    className="border border-gray-300 p-2 py-3 rounded w-80 "styles={{
+      control: (base) => ({
+        ...base,
+        border: 'none',
+        boxShadow: 'none'
+      }),
+      // other styles...
+    }}
+  />
+</div>
 
+<div className='mx-3 mt-6'>
+  <label className="block text-gray-500 text-sm font-medium mb-2" htmlFor="state">
+    State<span className='text-rose-400'>*</span>
+  </label>
+  <Select
+    value={{ value: formData.state, label: formData.state }}
+    onChange={(selectedOption) => setFormData({ ...formData, state: selectedOption.value })}
+    options={Object.keys(stateAndCityData).map(state => ({ value: state, label: state }))}
+    placeholder="Select State"
+    className="border border-gray-300 p-2 py-3 rounded w-80 "
+    styles={{
+      control: (base) => ({
+        ...base,
+        border: 'none',
+        boxShadow: 'none'
+      }),
+      // other styles...
+    }}
+  />
+</div>
           <div className='mx-3  mt-6'>
-            <label className="block text-gray-500 text-sm font-medium mb-2" htmlFor="state">
-            State<span className='text-rose-400'>*</span>
-            </label>
-            <input
-              className="border border-gray-300 p-2 py-4 rounded w-80"
-              type="text"
-              id="state"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              required
-              placeholder='State'
-            />
-          </div>
-          <div className='mx-3  mt-6'>
-            <label className="block text-gray-500 text-sm font-medium mb-2" htmlFor="city">
-            City<span className='text-rose-400'>*</span>
-            </label>
-            <input
-              className="border border-gray-300 p-2 py-4 rounded w-80"
-              type="text"
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
-              placeholder='City'
-            />
+          <label className="block text-gray-500 text-sm font-medium mb-2" htmlFor="city">
+                City<span className='text-rose-400'>*</span>
+              </label>
+              <Select
+                value={{ value: formData.city, label: formData.city }}
+                onChange={(selectedOption) => setFormData({ ...formData, city: selectedOption.value })}
+                options={formData.state ? stateAndCityData[formData.state].map(city => ({ value: city, label: city })) : []}
+                placeholder="Select City"
+                isDisabled={!formData.state}
+                className="border border-gray-300 p-2 py-3 rounded w-80  "    styles={{
+                  control: (base) => ({
+                    ...base,
+                    border: 'none',
+                    boxShadow: 'none'
+                  }),
+                  // other styles...
+                }}
+              />
           </div>
           <div className='mx-3 mt-6'>
             <label className="block text-gray-500 text-sm font-medium mb-2" htmlFor="pincode">
