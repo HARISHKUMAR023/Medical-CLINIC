@@ -1,9 +1,16 @@
-
 import PropTypes from 'prop-types';
 
-const Cardsupplier = ({ supplier }) => {
-  const { agencyContactName, contactMailId, contactPhoneNumber } = supplier;
-  const firstLetter = agencyContactName.charAt(0).toUpperCase();
+const Carduser = ({ patient}) => {
+  // Check if patient object is defined
+  if (!patient) {
+    return <div>Loading...</div>; // Or handle the case of undefined patient as needed
+  }
+
+  // Destructure patient object
+  const { patientName, contactMailId, contactPhoneNumber, patientUniqueId } = patient;
+
+  // Get first letter of patientName
+  const firstLetter = patientName.charAt(0).toUpperCase();
 
   return (
     <div className="max-w-sm bg-white drop-shadow-lg rounded-lg overflow-hidden hover:bg-cyan-100">
@@ -13,7 +20,8 @@ const Cardsupplier = ({ supplier }) => {
             <span className="text-white text-xl">{firstLetter}</span>
           </div>
           <div className="ml-2">
-            <p className="text-xl font-semibold ">{agencyContactName}</p>
+            <p className="text-xl font-semibold ">{patientName}</p>
+            <p className="text-sm">{patientUniqueId}</p>
             <p className="text-sm">{contactMailId}</p>
           </div>
         </div>
@@ -26,12 +34,13 @@ const Cardsupplier = ({ supplier }) => {
 };
 
 // Prop types validation
-Cardsupplier.propTypes = {
-  supplier: PropTypes.shape({
-    agencyContactName: PropTypes.string.isRequired,
+Carduser.propTypes = {
+    patient: PropTypes.shape({
+    patientName: PropTypes.string.isRequired,
     contactMailId: PropTypes.string.isRequired,
+    patientUniqueId: PropTypes.string.isRequired,
     contactPhoneNumber: PropTypes.string.isRequired,
-  }).isRequired,
+  }),
 };
 
-export default Cardsupplier;
+export default Carduser;

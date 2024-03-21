@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
 import { CgCloseR } from 'react-icons/cg';
 
-const CreateSuppliers = ({ onClose, refetchSuppliers, editData }) => {
+const CreatePatients = ({ onClose, refetchSuppliers, editData }) => {
   const loginusername = useSelector((state) => state.auth.user.name);
   const [formData, setFormData] = useState({
     agencyContactName: '',
@@ -245,10 +245,10 @@ const CreateSuppliers = ({ onClose, refetchSuppliers, editData }) => {
   );
 };
 
-CreateSuppliers.propTypes = {
+CreatePatients.propTypes = {
   onClose: PropTypes.func.isRequired,
   refetchSuppliers: PropTypes.func.isRequired,
   editData: PropTypes.object
 };
 
-export default CreateSuppliers;
+export default CreatePatients;

@@ -253,7 +253,13 @@ const Menu = () => {
               <IoMdArrowDropright className="ml-2 mt-1" />
             )}
           </Link>
-
+          <Link
+            to="Patients"
+            className={`mb-4 m-2 ml-5 ${selectedRow === 4 ? 'block' : 'hidden'}`}
+          >
+            {/* Add an icon if needed, e.g., <IoProfileOutline className="mr-2" /> */}
+            <span className={`flex items-center ${isMenuOpen ? 'block' : 'hidden'}`}> <GoDotFill className={`w-2 h-2 mr-3 ${isMenuOpen ? 'block' : 'hidden'}`} /> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Patients</span></span>
+          </Link>
           <Link
             to="Suppliersview"
             className={`mb-4 m-2 ml-5 ${selectedRow === 4 ? 'block' : 'hidden'}`}

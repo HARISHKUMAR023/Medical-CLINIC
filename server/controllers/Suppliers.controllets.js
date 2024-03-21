@@ -1,12 +1,24 @@
 const Supplier = require('../models/Suppliers.model');
 
+const validator = require('validator');
+
 // Controller for creating a new supplier
 exports.createSupplier = async (req, res) => {
   try {
     const { agencyContactName, contactMailId, contactPhoneNumber, contactAddress, country, state, city, pincode } = req.body;
+
+    // Validation
+    if (!validator.isEmail(contactMailId)) {
+      return res.status(400).json({ success: false, message: "Invalid email address" });
+    }
+
+    if (!validator.isMobilePhone(contactPhoneNumber, 'any', { strictMode: false })) {
+      return res.status(400).json({ success: false, message: "Invalid phone number" });
+    }
+
     const newSupplier = new Supplier({ agencyContactName, contactMailId, contactPhoneNumber, contactAddress, country, state, city, pincode });
     await newSupplier.save();
-    res.status(201).json({  newSupplier, message: "Supplier created successfully" });
+    res.status(201).json({ newSupplier, message: "Supplier created successfully" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

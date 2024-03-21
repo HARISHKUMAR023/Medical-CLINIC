@@ -15,6 +15,7 @@ import Products from './Pages/Master/Products/Products';
 import FinancialYear from './Pages/Master/FinancialYear/FinancialYear';
 import Paymenttype from './Pages/Master/Paymenttype/Paymenttype';
 import Suppliers from './Pages/Users/Suppliers/Suppliers';
+import Patients from './Pages/Users/Patients/Patients';
 import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,12 +26,12 @@ const Layout = () => {
     return <Navigate to="/" />;
   }
   return (
-    <div className="main flex flex-row max-h-screen">
+    <div className="main flex flex-row h-screen overflow-hidden">
       {/* <div className="container flex flex-row "> */}
         <div className="menucontainer  max-h-screen">
           <Menu />
         </div>
-        <div className="content-Container basis-full max-h-screen">
+        <div className="content-Container basis-full h-auto">
           <Navbar />
           <ToastContainer />
           <div className="overflow-y-auto">
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
       {
         path: "Suppliersview",
         element: <Suppliers />,
+      },
+      {
+        path: "Patients",
+        element: <Patients />,
       },
     ],
   },
