@@ -272,9 +272,39 @@ const Menu = () => {
         {/* <li className="flex items-center     rounded ">
           <Link to="/users"className="flex items-center mb-4 m-2 "><img src={master} alt="" className="mr-2" /><span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Master </span></Link>
         </li> */}
-        <li className="flex items-center   rounded ">
+        {/* <li className="flex items-center   rounded ">
           <Link to="/users"className="flex items-center mb-4 m-2 "><svg className="mr-2" xmlns="http://www.w3.org/2000/svg" width="19px" height="19px" viewBox="0 0 14 14"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M5.25 8.25H1a.5.5 0 0 0-.5.5V13a.5.5 0 0 0 .5.5h4.25a.5.5 0 0 0 .5-.5V8.75a.5.5 0 0 0-.5-.5m7.75 0H8.75a.5.5 0 0 0-.5.5V13a.5.5 0 0 0 .5.5H13a.5.5 0 0 0 .5-.5V8.75a.5.5 0 0 0-.5-.5M9.13.5H4.88a.5.5 0 0 0-.5.5v4.25a.5.5 0 0 0 .5.5h4.25a.5.5 0 0 0 .5-.5V1a.5.5 0 0 0-.5-.5"/></svg> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Activity </span></Link>
-        </li>
+        </li> */}
+          { usertype == 'user' && (
+        <li className="flex flex-col group rounded transition-all duration-300 ease-in-out">
+          <Link
+           
+            className="flex items-center m-2"
+            onClick={() => handleSubMenuClick(5)} // Pass a unique index for each submenu
+          >
+            <svg className="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24px" viewBox="0 0 36 36"><path fill="currentColor" d="M14.68 14.81a6.76 6.76 0 1 1 6.76-6.75a6.77 6.77 0 0 1-6.76 6.75m0-11.51a4.76 4.76 0 1 0 4.76 4.76a4.76 4.76 0 0 0-4.76-4.76" className="clr-i-outline clr-i-outline-path-1"/><path fill="currentColor" d="M16.42 31.68A2.14 2.14 0 0 1 15.8 30H4v-5.78a14.81 14.81 0 0 1 11.09-4.68h.72a2.2 2.2 0 0 1 .62-1.85l.12-.11c-.47 0-1-.06-1.46-.06A16.47 16.47 0 0 0 2.2 23.26a1 1 0 0 0-.2.6V30a2 2 0 0 0 2 2h12.7Z" className="clr-i-outline clr-i-outline-path-2"/><path fill="currentColor" d="M26.87 16.29a.37.37 0 0 1 .15 0a.42.42 0 0 0-.15 0" className="clr-i-outline clr-i-outline-path-3"/><path fill="currentColor" d="m33.68 23.32l-2-.61a7.21 7.21 0 0 0-.58-1.41l1-1.86A.38.38 0 0 0 32 19l-1.45-1.45a.36.36 0 0 0-.44-.07l-1.84 1a7.15 7.15 0 0 0-1.43-.61l-.61-2a.36.36 0 0 0-.36-.24h-2.05a.36.36 0 0 0-.35.26l-.61 2a7 7 0 0 0-1.44.6l-1.82-1a.35.35 0 0 0-.43.07L17.69 19a.38.38 0 0 0-.06.44l1 1.82a6.77 6.77 0 0 0-.63 1.43l-2 .6a.36.36 0 0 0-.26.35v2.05A.35.35 0 0 0 16 26l2 .61a7 7 0 0 0 .6 1.41l-1 1.91a.36.36 0 0 0 .06.43l1.45 1.45a.38.38 0 0 0 .44.07l1.87-1a7.09 7.09 0 0 0 1.4.57l.6 2a.38.38 0 0 0 .35.26h2.05a.37.37 0 0 0 .35-.26l.61-2.05a6.92 6.92 0 0 0 1.38-.57l1.89 1a.36.36 0 0 0 .43-.07L32 30.4a.35.35 0 0 0 0-.4l-1-1.88a7 7 0 0 0 .58-1.39l2-.61a.36.36 0 0 0 .26-.35v-2.1a.36.36 0 0 0-.16-.35M24.85 28a3.34 3.34 0 1 1 3.33-3.33A3.34 3.34 0 0 1 24.85 28" className="clr-i-outline clr-i-outline-path-4"/><path fill="none" d="M0 0h36v36H0z"/></svg> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Activity </span>
+            {selectedRow === 5 ? (
+              <IoMdArrowDropdown className="ml-2 mt-1" />
+            ) : (
+              <IoMdArrowDropright className="ml-2 mt-1" />
+            )}
+          </Link>
+          <Link
+            to="Purchase"
+            className={`mb-4 m-2 ml-5 ${selectedRow === 5 ? 'block' : 'hidden'}`}
+          >
+          
+            <span className={`flex items-center ${isMenuOpen ? 'block' : 'hidden'}`}> <GoDotFill className={`w-2 h-2 mr-3 ${isMenuOpen ? 'block' : 'hidden'}`} /> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Purchase</span></span>
+          </Link>
+          {/* <Link
+            to="Suppliersview"
+            className={`mb-4 m-2 ml-5 ${selectedRow === 5 ? 'block' : 'hidden'}`}
+          >
+           
+            <span className={`flex items-center ${isMenuOpen ? 'block' : 'hidden'}`}> <GoDotFill className={`w-2 h-2 mr-3 ${isMenuOpen ? 'block' : 'hidden'}`} /> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Suppliers</span></span>
+          </Link> */}
+           
+        </li>)}
         <li className="flex items-center   rounded ">
           <Link to="/users"className="flex items-center mb-4 m-2 "><svg className="mr-2" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 19.128a9.38 9.38 0 0 0 2.625.372a9.337 9.337 0 0 0 4.121-.952a4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0a3.375 3.375 0 0 1 6.75 0m8.25 2.25a2.625 2.625 0 1 1-5.25 0a2.625 2.625 0 0 1 5.25 0"/></svg><span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Users </span></Link>
         </li>

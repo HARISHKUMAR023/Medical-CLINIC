@@ -16,6 +16,8 @@ import FinancialYear from './Pages/Master/FinancialYear/FinancialYear';
 import Paymenttype from './Pages/Master/Paymenttype/Paymenttype';
 import Suppliers from './Pages/Users/Suppliers/Suppliers';
 import Patients from './Pages/Users/Patients/Patients';
+import Purchase from './Pages/Activity/Purchase/Purchase';
+import AddPurchase from './Pages/Activity/Purchase/AddPurchase';
 import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -91,6 +93,17 @@ const router = createBrowserRouter([
         path: "Patients",
         element: <Patients />,
       },
+      {
+        path: "Purchase",
+        element: <Purchase />,
+       
+      },
+      {
+        path: "/dashboard/Purchase/addPurchase",
+        element: <AddPurchase />,
+       
+      },
+
     ],
   },
   {
