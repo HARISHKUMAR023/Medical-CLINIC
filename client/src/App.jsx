@@ -28,12 +28,12 @@ const Layout = () => {
     return <Navigate to="/" />;
   }
   return (
-    <div className="main flex flex-row h-screen overflow-hidden">
+    <div className="main flex flex-row h-screen overflow-hidden ">
       {/* <div className="container flex flex-row "> */}
         <div className="menucontainer  max-h-screen">
           <Menu />
         </div>
-        <div className="content-Container basis-full h-auto">
+        <div className="content-Container basis-full h-auto w-64">
           <Navbar />
           <ToastContainer />
           <div className="overflow-y-auto">

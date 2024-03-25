@@ -11,21 +11,10 @@ const PurchaseSchema = new mongoose.Schema({
     // required: true
   },
   products: [{
-    compositionName: {
-      type: String,
-      // required: true
-    },
-    type: {
-      type: String,
-      // required: true
-    },
-    brand: {
-      type: String,
-      // required: true
-    },
-    manufacturer: {
-      type: String,
-      // required: true
+    productitem: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Productitem',
+      required: true
     },
     quantity: {
       type: Number,
