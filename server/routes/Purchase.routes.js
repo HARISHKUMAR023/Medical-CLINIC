@@ -20,4 +20,6 @@ router.delete('/purchases/:id', PurchaseController.deletePurchaseById);
 // Route for getting total purchases by supplier
 router.get('/purchases/total/:supplierId', PurchaseController.getPurchasesBySupplier);
 
+//get stock information
+router.get('/stock', PurchaseController.getStocks);
 module.exports = router;

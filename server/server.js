@@ -12,7 +12,8 @@ const Paymenttype = require('./routes/paymenttype.routes')
 const supplierRoutes = require('./routes/suppliers.routes');
 const PatientRoutes = require('./routes/Patient.routes') 
 const PurchaseRoutes = require('./routes/Purchase.routes');
-const Productitem = require('./routes/Productitem.routes')
+const Productitem = require('./routes/Productitem.routes');
+const billingRoutes = require('./routes/billing.routes');
 const app = express();
 require('dotenv').config();
 
@@ -48,6 +49,7 @@ app.use('/api', supplierRoutes);
 app.use('/api', PatientRoutes);
 app.use('/api', PurchaseRoutes);
 app.use('/api', Productitem);
+app.use('/api', billingRoutes);
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

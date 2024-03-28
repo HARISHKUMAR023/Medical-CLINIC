@@ -296,13 +296,13 @@ const Menu = () => {
           
             <span className={`flex items-center ${isMenuOpen ? 'block' : 'hidden'}`}> <GoDotFill className={`w-2 h-2 mr-3 ${isMenuOpen ? 'block' : 'hidden'}`} /> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Purchase</span></span>
           </Link>
-          {/* <Link
-            to="Suppliersview"
+          <Link
+            to="Billing"
             className={`mb-4 m-2 ml-5 ${selectedRow === 5 ? 'block' : 'hidden'}`}
           >
-           
-            <span className={`flex items-center ${isMenuOpen ? 'block' : 'hidden'}`}> <GoDotFill className={`w-2 h-2 mr-3 ${isMenuOpen ? 'block' : 'hidden'}`} /> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Suppliers</span></span>
-          </Link> */}
+          
+            <span className={`flex items-center ${isMenuOpen ? 'block' : 'hidden'}`}> <GoDotFill className={`w-2 h-2 mr-3 ${isMenuOpen ? 'block' : 'hidden'}`} /> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Billing</span></span>
+          </Link>
            
         </li>)}
         <li className="flex items-center   rounded ">

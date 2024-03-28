@@ -132,4 +132,38 @@ const toggleProductStatus = async (req, res) => {
     res.status(500).json({ message: 'Error toggling product status', error: err.message });
   }
 };
-module.exports = { product , getAllProducts ,deleteProduct , toggleProductStatus };
+const updateProduct = async (req, res) => {
+  try {
+    // Extract product ID from request parameters
+    const productId = req.params.id;
+
+    // Check if the product exists
+    const existingProduct = await Product.findById(productId);
+
+    if (!existingProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Update product fields if they exist in the request body
+    if (req.body.name) {
+      existingProduct.name = req.body.name;
+    }
+    // You can similarly update other fields here
+
+    // Handle file upload if a new product image is provided
+    if (req.file) {
+      existingProduct.productPic = req.file.filename;
+    }
+
+    // Save the updated product
+    await existingProduct.save();
+
+    // Send a success response
+    res.status(200).json({ message: 'Product updated successfully', updatedProduct: existingProduct });
+  } catch (err) {
+    // Handle errors
+    console.error('Error updating product:', err);
+    res.status(500).json({ message: 'Error updating product', error: err.message });
+  }
+};
+module.exports = { product , getAllProducts ,deleteProduct , toggleProductStatus,updateProduct };

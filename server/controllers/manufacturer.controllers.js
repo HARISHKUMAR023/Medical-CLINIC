@@ -39,7 +39,7 @@ const manufacturer = async (req, res) => {
         return res.status(400).json({ message: 'Error uploading file', error: err.message });
       }
 
-      const { name, createdBy } = req.body;
+      const { name,hsltype, createdBy } = req.body;
 
   
       // Get profile image filename
@@ -50,7 +50,7 @@ const manufacturer = async (req, res) => {
 
       const newmanufacturer = new Manufacturer({
         name,
-     
+        hsltype,
         manufacturerPic,
         
         createdBy:createdBy

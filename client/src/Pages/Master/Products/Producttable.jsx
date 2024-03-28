@@ -26,7 +26,7 @@ const Producttable = ({ data, columns, pageSize, onDataRefresh }) => {
   const paginatedData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const totalRecordsPerPage = paginatedData.length;
   const [showPopUp, setShowPopUp] = useState(false);
-
+  const [editData, setEditData] = useState(null); 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -50,10 +50,16 @@ const handleSwitchChange = (rowIndex, isChecked) => {
   handleToggleProduct(productId, isChecked);
 };
 
- 
+const handleEdit = (rowData) => {
+  // Set the data to edit and open the toggle popup
+  setEditData(rowData);
+  setShowPopup(true);
+}
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
+    // Clear edit data when closing the popup
+    if (!showPopup) setEditData(null);
   };
 
   const handleDelete = async (id) => {
@@ -100,7 +106,7 @@ const handleToggleProduct = async (productId, isActive) => {
   return (
     <div>
  <div className='h-auto mx-2'>
-      {showPopup && <CreateProduct onClose={togglePopup} onDataRefresh={onDataRefresh}/>}
+      {showPopup && <CreateProduct onClose={togglePopup} onDataRefresh={onDataRefresh} editData={editData}/>}
       <div className="container mx-auto p-4 bg-white z-10">
         <div className='flex justify-between mb-4'>
           <div className='flex items-center'>

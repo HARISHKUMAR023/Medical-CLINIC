@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 // import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import Select from 'react-select';
 const AddPurchase = () => {
   // const { id } = useParams();
   const [formData, setFormData] = useState({
@@ -29,48 +30,51 @@ const AddPurchase = () => {
   const [manifacture, setManifactur] = useState([]);
   const [products, setproducts] = useState([]);
   const [itemsSupplied, setItemsSupplied] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  console.log(itemsSupplied);
+  // Remove this line
+ const [selectedItems, setSelectedItems] = useState([]);
+  console.log(selectedItems);
 
-  const handleSupplierChange = (e) => {
-    const selectedSupplierId = e.target.value;
+  const handleSupplierChange = (selectedOption) => {
+    const selectedSupplierId = selectedOption ? selectedOption.value : "";
+    setItemsSupplied([]);
     // Fetch items supplied by the selected supplier
-    const baseURL = import.meta.env.VITE_BASE_URL;
-    const url = `${baseURL}purchases/total/${selectedSupplierId}`;
-    axios
-      .get(url)
-      .then((response) => {
-        //  setItemsSupplied(response.data);
-        if (Array.isArray(response.data.purchases)) {
-          const allProducts = response.data.purchases.flatMap(
-            (purchase) => purchase.products
+    if (selectedSupplierId) {
+      const baseURL = import.meta.env.VITE_BASE_URL;
+      const url = `${baseURL}purchases/total/${selectedSupplierId}`;
+      axios
+        .get(url)
+        .then((response) => {
+          if (Array.isArray(response.data.purchases) && response.data.purchases.length > 0) {
+            const allProducts = response.data.purchases.flatMap(
+              (purchase) => purchase.products
+            );
+      
+            const uniqueProducts = allProducts.filter(
+              (product, index, self) =>
+                product.productitem &&
+                index ===
+                  self.findIndex(
+                    (t) =>
+                      t.productitem &&
+                      t.productitem.compositionName ===
+                        product.productitem.compositionName
+                  )
+            );
+            setItemsSupplied(uniqueProducts);
+          } else {
+            alert("NO PRODUCT TO DISPLAY FOR THE SUPPLIER ")
+            setItemsSupplied([]);
+          }
+        })
+        .catch((error) => {
+          console.error(
+            "Error fetching items supplied by the selected supplier",
+            error
           );
-
-          const uniqueProducts = allProducts.filter(
-            (product, index, self) =>
-              product.productitem &&
-              index ===
-                self.findIndex(
-                  (t) =>
-                    t.productitem &&
-                    t.productitem.compositionName ===
-                      product.productitem.compositionName
-                )
-          );
-          setItemsSupplied(uniqueProducts);
-        } else {
-          console.error("Expected array but received", response.data.purchases);
-        }
-      })
-      .catch((error) => {
-        console.error(
-          "Error fetching items supplied by the selected supplier",
-          error
-        );
-      });
-
+        });
+    }
+  
     // Update supplier in form data
-
     setFormData({ ...formData, supplier: selectedSupplierId });
   };
 
@@ -138,19 +142,19 @@ const AddPurchase = () => {
 
   const handleAddClick = () => {
     // Get the last product
-    const lastProduct = formData.products[formData.products.length - 1];
+    // const lastProduct = formData.products[formData.products.length - 1];
 
-    // Check if any of the required fields are empty
-    if (
-      !lastProduct.compositionName ||
-      !lastProduct.type ||
-      !lastProduct.brand ||
-      !lastProduct.manufacturer
-    ) {
-      // alert('Please fill in all required fields.');
-      toast.error("Please fill in all required fields.");
-      return;
-    }
+    // // Check if any of the required fields are empty
+    // if (
+    //   !lastProduct.compositionName ||
+    //   !lastProduct.type ||
+    //   !lastProduct.brand ||
+    //   !lastProduct.manufacturer
+    // ) {
+    //   // alert('Please fill in all required fields.');
+    //   toast.error("Please fill in all required fields.");
+    //   return;
+    // }
 
     // Add a new product
     setFormData({
@@ -269,6 +273,11 @@ const AddPurchase = () => {
     setItemsSupplied(updatedItemsSupplied);
   };
 
+  //sereach slection supplier 
+  const supplierOptions = suppliers.map(supplier => ({
+    value: supplier._id,
+    label: supplier.agencyContactName
+  }));
   return (
     <form
       onSubmit={handleSubmit}
@@ -278,10 +287,18 @@ const AddPurchase = () => {
         <label htmlFor="supplier" className="block text-sm font-bold mb-2">
           Supplier
         </label>
-        <select
+        <Select
+        name="supplier"
+        value={supplierOptions.find(option => option.value === formData.supplier)}
+        onChange={handleSupplierChange}
+        options={supplierOptions}
+        isSearchable
+      />
+        
+        {/* <select
           name="supplier"
           value={formData.supplier}
-          // onChange={handleChange}
+          
           onChange={handleSupplierChange}
           className="w-full py-2 px-4 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         >
@@ -291,12 +308,8 @@ const AddPurchase = () => {
               {supplier.agencyContactName}
             </option>
           ))}
-          {/* {suppliers.map((supplier) => (
-            <option key={supplier._id} value={supplier._id}>
-              {supplier.agencyContactName}
-            </option>
-          ))} */}
-        </select>
+        
+        </select> */}
       </div>
       <div className="mb-4">
         <label htmlFor="purchaseDate" className="block text-sm font-bold mb-2">
@@ -312,7 +325,7 @@ const AddPurchase = () => {
       </div>
       <div className="mb-4">
         <label htmlFor="invoiceNumber" className="block text-sm font-bold mb-2">
-          Invoice Number
+        Supplier   Invoice Number
         </label>
         <input
           type="text"
@@ -326,7 +339,7 @@ const AddPurchase = () => {
         <label htmlFor="paymentstatus" className="block text-sm font-bold mb-2">
           Payment Status
         </label>
-        <select
+        {/* <select
           name="paymentstatus"
           value={formData.paymentstatus}
           onChange={handleChange}
@@ -334,7 +347,7 @@ const AddPurchase = () => {
         >
           <option value="Unpaid">Unpaid</option>
           <option value="Paid">Paid</option>
-        </select>
+        </select> */}
       </div>
       <div className="overflow-auto mb-4">
         <table className="w-full table-auto text-left whitespace-no-wrap border-collapse border border-slate-400">
@@ -501,6 +514,7 @@ const AddPurchase = () => {
                     onChange={(e) => handleInputChange(e, i)}
                     className="w-full py-2 px-4 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   >
+                     <option  value=''>Selet Manifacturer</option>
                     {manifacture.map((manifacture) => (
                       <option key={manifacture.name} value={manifacture.name}>
                         {manifacture.name}
@@ -515,6 +529,7 @@ const AddPurchase = () => {
                     onChange={(e) => handleInputChange(e, i)}
                     className="w-full py-2 px-4 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   >
+                  <option  value=''>Select Type</option>
                     {products.map((product) => (
                       <option key={product.name} value={product.name}>
                         {product.name}

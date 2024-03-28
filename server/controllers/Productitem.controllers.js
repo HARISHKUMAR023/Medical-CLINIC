@@ -26,6 +26,25 @@ const createProductitem = async (req, res) => {
   }
 };
 
+const fetchProductitems = async (req, res) => {
+  try {
+    // Fetch all product items from the database
+    const productItems = await Productitem.find();
+
+    res.status(200).json({
+      success: true,
+      productItems,
+      message: 'Product items fetched successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server Error'
+    });
+  }
+};
+
 module.exports = {
-  createProductitem
+  createProductitem,
+  fetchProductitems
 };

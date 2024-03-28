@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import axios from 'axios';
 import { CgCloseR } from "react-icons/cg";
 import user from '../../../assets/images/icons/formicone/user.png';
@@ -7,13 +7,24 @@ import { useSelector } from "react-redux";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const CreateProduct = ({ onClose, onDataRefresh }) => {
+const CreateProduct = ({ onClose, onDataRefresh,editData }) => {
   const loginusername = useSelector((state) => state.auth.user.name);
   
   const [formData, setFormData] = useState({
     name: '',
     productPic: null,
   });
+
+  useEffect(() => {
+    if (editData) {
+      // If editData is provided, populate the form fields with its data
+      setFormData({
+        name: editData.name || '',
+        productPic: editData.productPic || null
+      });
+      // setPreviewImage(editData.manufacturerPic || null); // Set preview image
+    }
+  }, [editData]);
 
   const handleChange = (e) => {
     if (e.target.name === 'productPic') {
@@ -33,19 +44,37 @@ const CreateProduct = ({ onClose, onDataRefresh }) => {
  
     try {
       const baseURL = import.meta.env.VITE_BASE_URL;
-      const url = `${baseURL}products`;
-     const response =  await axios.post(url, postData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      let url;
+    //  const response =  await axios.post(url, postData, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data'
+    //     }
+    //   });
       
-    
-      toast.success(response.data.message);
-      setTimeout(() => {
-        onClose();
-        onDataRefresh();
-      }, 3000);
+    if (editData) {
+      // If editData exists, it's an edit operation
+       url = `${baseURL}products`;
+      url += `/${editData._id}`; // Append ID for editing
+      await axios.put(url, {
+        ...formData,
+        createdBy: loginusername,
+      });
+      toast.success('Prodcuts year updated successfully.');
+    } else {
+      // If editData is null, it's a create operation
+      url = `${baseURL}products`;
+      await axios.post(url, {
+        ...formData,
+        createdBy: loginusername,
+      });
+      toast.success('Products year created successfully.');
+    }
+
+    setTimeout(() => {
+      onClose();
+      onDataRefresh();
+    }, 3000);
+   
     } catch (error) {
       console.error('Error creating product:', error);
       toast.error(error.response.data.message)
@@ -118,10 +147,11 @@ const CreateProduct = ({ onClose, onDataRefresh }) => {
               </button>
               <button
                 type="submit"
-                className="hover:bg-teal-700 text-white font-bold py-2 px-4 rounded "
-                style={{backgroundColor:'#00BBD1'}}
+                className={`hover:bg-teal-700 text-white font-bold px-4 rounded py-2 ${
+                  editData ? 'bg-blue-500' : 'bg-green-500'
+                }`}
               >
-                Submit
+                {editData ? 'Update' : 'Create'}
               </button>
             </div>
           </div>
@@ -133,7 +163,8 @@ const CreateProduct = ({ onClose, onDataRefresh }) => {
 
 CreateProduct.propTypes = {
   onClose: PropTypes.func.isRequired,
-  onDataRefresh: PropTypes.func.isRequired
+  onDataRefresh: PropTypes.func.isRequired,
+  editData: PropTypes.object
 };
 
 export default CreateProduct;

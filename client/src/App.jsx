@@ -18,6 +18,7 @@ import Suppliers from './Pages/Users/Suppliers/Suppliers';
 import Patients from './Pages/Users/Patients/Patients';
 import Purchase from './Pages/Activity/Purchase/Purchase';
 import AddPurchase from './Pages/Activity/Purchase/AddPurchase';
+import Billing from './Pages/Activity/Billing/Billing';
 import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -101,6 +102,11 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/Purchase/addPurchase",
         element: <AddPurchase />,
+       
+      },
+      {
+        path: "Billing",
+        element: <Billing />,
        
       },
 
