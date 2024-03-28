@@ -12,7 +12,10 @@ const BillingSchema = new mongoose.Schema({
       sellingPrice: Number,
     },
   ],
-  total: Number,
+  cgst: Number,
+  sgst: Number,
+  totalPrice: Number,
+  payableAmount: Number,
   date: {
     type: Date,
     default: Date.now,
