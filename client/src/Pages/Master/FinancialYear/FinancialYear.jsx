@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
 const columns = [
-    { key: 'title', title: 'title' },
-    { key: 'startDate', title: 'startDate' },
-    { key: 'endDate', title: 'endDate' },
-    { key: 'createdBy', title: 'createdBy' },
+    { key: 'title', title: 'Title' },
+    { key: 'startDate', title: 'StartDate' },
+    { key: 'endDate', title: 'EndDate' },
+    { key: 'createdBy', title: 'CreatedBy' },
 ];
 // const baseURL = import.meta.env.VITE_BASE_URL;
 // console.log('Base URL:', baseURL);

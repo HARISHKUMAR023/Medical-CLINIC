@@ -18,6 +18,10 @@ const financialYearSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  active: {
+    type: Boolean,
+    default: true
+},
   createdDate: {
     type: Date,
     default: Date.now

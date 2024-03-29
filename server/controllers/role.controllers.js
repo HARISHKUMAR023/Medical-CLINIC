@@ -6,7 +6,7 @@ const createRole = async (req, res) => {
     const { role, permissions,createdBy } = req.body;
     const newRolePermission = new RolePermission({ role, permissions,createdBy });
     const savedRolePermission = await newRolePermission.save();
-    res.status(201).json(savedRolePermission);
+    res.status(201).json({savedRolePermission , message:"Roles Created sucessfully"});
   } catch (error) {
     console.error('Error creating role:', error);
     res.status(500).json({ message: 'Error creating role' });

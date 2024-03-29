@@ -1,23 +1,20 @@
 import FinancialYearForm from "./FinancialYearForm"
 // Table.js
 
-import  { useState } from 'react';
+import  { useState,useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Switch, { switchClasses } from '@mui/joy/Switch';
 
-// import del from "../../assets/images/icons/tableicone/delete.svg";
-// import * as React from 'react';
 import Box from '@mui/material/Box';
-// import InputLabel from '@mui/material/InputLabel';
+
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import { BsFilterLeft } from "react-icons/bs";
 import { LuFilter } from "react-icons/lu";
 import { MdOutlineFormatListBulleted } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
-// import { GrNext } from "react-icons/gr";
-// import { GrPrevious } from "react-icons/gr";
+
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -35,22 +32,53 @@ const FinancialYearTable = ({ data, columns, pageSize,onDataRefresh  }) => {
   const paginatedData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const totalRecordsPerPage = paginatedData.length;
   const [showPopUp, setShowPopUp] = useState(false);
+  const [editData, setEditData] = useState(null); 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const handleSwitchChange = (rowIndex, isChecked) => {
-    setCheckedRows((prevCheckedRows) => ({
-      ...prevCheckedRows,
-      [rowIndex]: isChecked,
-    }));
-  };
 
 
-  // form toggle 
+ // Update checkedRows state when data prop changes
+useEffect(() => {
+  const initialCheckedRows = {};
+  data.forEach((item, index) => {
+    initialCheckedRows[index] = item.active; // Assuming the 'active' property indicates the product's active/inactive status
+  });
+  setCheckedRows(initialCheckedRows);
+}, [data]);
+  
+
+const handleSwitchChange = (rowIndex, isChecked) => {
+  setCheckedRows((prevCheckedRows) => ({
+    ...prevCheckedRows,
+    [rowIndex]: isChecked,
+  }));
+  const FinancialYearid = data[rowIndex]._id; // Assuming _id is the unique identifier for each product
+  handleToggleProduct(FinancialYearid, isChecked);
+};
+
+ 
+const handleToggleProduct = async (FinancialYearid, isActive) => {
+  try {
+    const url = `${import.meta.env.VITE_BASE_URL}/financial-years/${FinancialYearid}/toggle`;
+    await axios.put(url, { active: isActive });
+    onDataRefresh();
+  } catch (error) {
+    console.error('Error toggling finacial  status:', error);
+    alert('Error toggling finacail status');
+  }
+};
+
+  const handleEdit = (rowData) => {
+    // Set the data to edit and open the toggle popup
+    setEditData(rowData);
+    setShowPopup(true);
+  }
   const togglePopup = () => {
     setShowPopup(!showPopup);
+    // Clear edit data when closing the popup
+    if (!showPopup) setEditData(null);
   };
-
   const handleDelete = async (id) => {
     // Show the delete confirmation pop-up
     setShowPopUp(true);
@@ -80,9 +108,34 @@ const FinancialYearTable = ({ data, columns, pageSize,onDataRefresh  }) => {
     console.log('Cancelled');
     setShowPopUp(false);
   };
+  const formatDate = (dateString) => {
+    // Parse the date string
+    const date = new Date(dateString);
+  
+    // Extract day, month, and year components
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-based, so add 1
+    const year = date.getFullYear();
+  
+    // Convert components to strings and pad single digits with leading zeros
+    const formattedDay = day < 10 ? `0${day}` : `${day}`;
+    const formattedMonth = month < 10 ? `0${month}` : `${month}`;
+  
+    // Arrange components in the desired format
+    const formattedDate = `${formattedDay}/${formattedMonth}/${year}`;
+  
+    return formattedDate;
+  };
+  
+  // Usage example
+  const originalDate = "2024-03-19T00:00:00.000Z";
+  const formattedDate = formatDate(originalDate);
+  console.log(formattedDate); // Output: "19-03-2024"
+  
   return (
     <div  className='h-auto mx-2'>
-       {showPopup  && < FinancialYearForm  onClose={togglePopup} onDataRefresh={onDataRefresh} />}
+      
+       {showPopup  && < FinancialYearForm  onClose={togglePopup} onDataRefresh={onDataRefresh}    editData={editData} />}
     <div className="container mx-auto p-4  bg-white">
       <div className='flex justify-between mb-4'>
         <div className='flex items-center ' >
@@ -122,14 +175,14 @@ const FinancialYearTable = ({ data, columns, pageSize,onDataRefresh  }) => {
         <thead>
           <tr className='text-black shadow-sm text-center items-center rounded-md' style={{backgroundColor:'#EAEAEA'}}>
             {columns.map((column) => (
-              <th key={column.key} className="py-2 px-4 text-left font-medium">
+              <th key={column.key} className="py-2 px-4 text-left font-medium normal-case">
                 {column.title}
               </th>
             ))}
-              <th  className="py-2 px-4 text-left font-medium">
+              <th  className="py-2 px-4 text-left font-medium normal-case">
              Status
            </th>
-           <th  className="py-2 px-4 text-left font-medium">
+           <th  className="py-2 px-4 text-left font-medium normal-case">
            
            </th> 
           </tr>
@@ -140,35 +193,38 @@ const FinancialYearTable = ({ data, columns, pageSize,onDataRefresh  }) => {
 
             <tr key={index} className="hover:bg-gray-100 shadow-sm py-3 rounded-md items-center">
               {columns.map((column) => (
-                <td key={column.key} className="py-2 px-4   font-light ">
-                  {row[column.key]}
+                <td key={column.key} className="py-2 px-4   font-light capitalize">
+                   {column.key === 'startDate' || column.key === 'endDate' ? formatDate(row[column.key]) : row[column.key]}
                 </td>
-              ))}
-              <td className='py-2 px-4 flex items-center'>
-              <Switch
-       color={checkedRows[index] ? 'success' : 'danger'}
-       checked={checkedRows[index] || false}
-       onChange={(event) => handleSwitchChange(index, event.target.checked)}
-      sx={{
-         paddingTop:'12px',
-        '--Switch-thumbSize': '12px',
-        '--Switch-trackWidth': '30px',
-        '--Switch-trackHeight': '18px',
-        '--Switch-trackBackground': '#FF3838',
-        '&:hover': {
-          '--Switch-trackBackground': '#FF3838',
-        },
-        [`&.${switchClasses.checked}`]: {
-          '--Switch-trackBackground': '#2CA302',
-          '&:hover': {
-            '--Switch-trackBackground': '#2CA302',
-          },
-        },
-      }}
-    />
-      {checkedRows[index] ? <span className='pl-3 text-green-600 text-center mt-2'>Active</span> : <span className='pl-3 text-red-600 text-center mt-2'>Inactive</span>}
-              </td>
-              
+              ))} 
+ <td className='py-2 px-4 flex items-center'>
+                    <Switch
+                      color={checkedRows[index] ? 'success' : 'danger'}
+                      checked={checkedRows[index] || false}
+                      onChange={(event) => handleSwitchChange(index, event.target.checked)}
+                      sx={{
+                         paddingTop: '10px',
+                        '--Switch-thumbSize': '12px',
+                        '--Switch-trackWidth': '30px',
+                        '--Switch-trackHeight': '18px',
+                        '--Switch-trackBackground': '#FF3838',
+                        '&:hover': {
+                          '--Switch-trackBackground': '#FF3838',
+                        },
+                        [`&.${switchClasses.checked}`]: {
+                          '--Switch-trackBackground': '#2CA302',
+                          '&:hover': {
+                            '--Switch-trackBackground': '#2CA302',
+                          },
+                        },
+                      }}
+                    />
+                    {checkedRows[index] ? (
+                      <span className='pl-3 text-green-600 text-center mt-3'>Active</span>
+                    ) : (
+                      <span className='pl-3 text-red-600 text-center mt-3'>Inactive</span>
+                    )}
+                  </td>
               <td className="py-2 px-4 ">
                 <button className="px-2 py-1 mr-2  rounded" onClick={() => handleEdit(row)}>
                 <FaEdit  className='w-6 h-8'/>

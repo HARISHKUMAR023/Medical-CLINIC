@@ -106,4 +106,64 @@ const getAllProducts = async (req, res) => {
       res.status(500).json({ message: 'Error deleting product', error: err.message });
     }
   };  
-module.exports = { product , getAllProducts ,deleteProduct };
+
+
+// Activate or deactivate a product
+const toggleProductStatus = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    // Find the product by ID
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Toggle the active status
+    product.active = !product.active;
+
+    // Save the updated product
+    await product.save();
+
+    res.status(200).json({ message: 'Product status toggled successfully', product });
+  } catch (err) {
+    console.error('Error toggling product status:', err);
+    res.status(500).json({ message: 'Error toggling product status', error: err.message });
+  }
+};
+const updateProduct = async (req, res) => {
+  try {
+    // Extract product ID from request parameters
+    const productId = req.params.id;
+
+    // Check if the product exists
+    const existingProduct = await Product.findById(productId);
+
+    if (!existingProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Update product fields if they exist in the request body
+    if (req.body.name) {
+      existingProduct.name = req.body.name;
+    }
+    // You can similarly update other fields here
+
+    // Handle file upload if a new product image is provided
+    if (req.file) {
+      existingProduct.productPic = req.file.filename;
+    }
+
+    // Save the updated product
+    await existingProduct.save();
+
+    // Send a success response
+    res.status(200).json({ message: 'Product updated successfully', updatedProduct: existingProduct });
+  } catch (err) {
+    // Handle errors
+    console.error('Error updating product:', err);
+    res.status(500).json({ message: 'Error updating product', error: err.message });
+  }
+};
+module.exports = { product , getAllProducts ,deleteProduct , toggleProductStatus,updateProduct };
