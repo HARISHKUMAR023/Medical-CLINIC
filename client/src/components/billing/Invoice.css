@@ -1,0 +1,6 @@
+@media print {
+    .invoice-header p {
+      font-size: 12px; /* Adjust size for printing */
+    }
+  }
+  

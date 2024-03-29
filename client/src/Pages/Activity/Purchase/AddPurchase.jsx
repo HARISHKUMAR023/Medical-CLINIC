@@ -199,7 +199,7 @@ const AddPurchase = () => {
       .post(url, data)
       .then((response) => {
         console.log(response.data);
-        toast.success(response.data.message);
+        
         setFormData({
           supplier: "",
           purchaseDate: "",
@@ -220,6 +220,7 @@ const AddPurchase = () => {
           invoiceNumber: "",
           paymentstatus: "",
         });
+        toast.success(response.data.message);
         setSelectedItems([]); // Clear selected items
       })
       .catch((error) => {

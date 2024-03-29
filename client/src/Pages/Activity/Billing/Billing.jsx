@@ -8,15 +8,17 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import BillingPreview from "../../../components/billing/BillingPreview";
+import { useReactToPrint } from 'react-to-print';
 import Invoice from "../../../components/billing/Invoice";
-import * as ReactDOMServer from 'react-dom/server';
+
 const Billing = () => {
   const [open, setOpen] = useState(false);
- 
+  const [searchTerm, setSearchTerm] = useState("");
   const [stocks, setStocks] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [cgst, setCgst] = useState(0);
   const [sgst, setSgst] = useState(0);
+  const [selectedType, setSelectedType] = useState("");
   // Fetch products from the server
   const fetchProducts = async () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -44,7 +46,8 @@ useEffect(() => {
   // Calculate total price including taxes
   const calculateTotalPrice = () => {
     const totalPrice = selectedProducts.reduce((acc, product) => acc + (product.quantity * product.sellingPrice), 0);
-    return totalPrice + cgst + sgst;
+    return totalPrice
+   // + cgst + sgst;
   };
 
   const payableAmount = calculateTotalPrice();
@@ -116,51 +119,42 @@ const handleClose = () => {
   };
 
 
-  const handlePrint = () => {
-    //const printWindow = window.open('', '_blank');
-    const printWindow = window;
-    const invoice = ReactDOMServer.renderToString(
-      <Invoice
-        selectedProducts={selectedProducts}
-        cgst={cgst}
-        sgst={sgst}
-        // totalPrice={totalPrice}
-        payableAmount={payableAmount}
-      />
-    );
   
-    printWindow.document.write('<html><head><title>Print</title></head><body>');
-    printWindow.document.write(invoice);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-  
-    printWindow.onafterprint = () => {
-      printWindow.close(); // Close the window after printing or canceling
-    };
-  
-    printWindow.print();
-  };
-  
-
+  const handlePrint = useReactToPrint({
+    content: () => document.getElementById('invoice-container'),
+    documentTitle: 'Pharmacy Invoice',
+    onAfterPrint: () => setOpen(false), // Close confirmation dialog after printing
+  });
   return (
-    <div className="flex bg-white">
+    <div className="flex bg-white my-2 m-2">
+      
+      <div className="pt-2 px-2" >
+        {/* search the poducts */}
+        <input type="search" name="" id="" className="border-2" placeholder="Search the Product" onChange={e => setSearchTerm(e.target.value)} />
+        <label className="px-2" htmlFor="tablet">Tablet</label>
+        <input type="checkbox" name="tablet" id="tablet" onChange={() => setSelectedType('tablet')} />
+        <label className="px-2" htmlFor="serup">Serup</label>
+        <input type="checkbox" name="serup" id="serup" onChange={() => setSelectedType('serup')} />
 
-      <div className="">
-        <table className="table-auto">
+      <div className="overflow-auto h-[550px]">
+      <table className="table-auto ">
           <thead>
             <tr>
-              <th className="px-4 py-2">Product</th>
-              <th className="px-4 py-2">Brand</th>
-              <th className="px-4 py-2">Type</th>
-              <th className="px-4 py-2">Quantity</th>
-              <th className="px-4 py-2">Expiry Date</th>
-              <th className="px-4 py-2">Actions</th>
+              <th className="px-4 py-2 text-sm">Product</th>
+              <th className="px-4 py-2 text-sm">Brand</th>
+              <th className="px-4 py-2 text-sm">Type</th>
+              <th className="px-4 py-2 text-sm">Quantity</th>
+              <th className="px-4 py-2 text-sm">Expiry Date</th>
+              <th className="px-4 py-2 text-sm">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="overflow-y-auto ">
             {Array.isArray(stocks) &&
-              stocks.map((stock) => (
-                <tr key={stock._id}>
+               stocks
+               .filter(stock => selectedType === "" || stock.productitem.type === selectedType)
+               .filter(stock => stock.productitem.compositionName.toLowerCase().includes(searchTerm.toLowerCase()))
+               .map((stock) =>  (
+                <tr key={stock._id} className="text-sm">
                   <td className="border px-4 py-2">
                     {stock.productitem.compositionName}
                   </td>
@@ -178,13 +172,13 @@ const handleClose = () => {
                   </td>
                   <td className="border px-4 py-2">
                     <button
-                      className="bg-red-500 p-2 mr-2"
+                      className=""
                       onClick={() => handleQuantityChange(stock, 1)}
                     >
                       +
                     </button>
                     <button
-                      className="bg-green-500 p-2 ml-2"
+                      className=" ml-2"
                       onClick={() =>
                         handleQuantityChange(stock, -1)
                       }
@@ -192,7 +186,7 @@ const handleClose = () => {
                       -
                     </button>
                     <button
-                      className="bg-blue-500 text-white p-2 ml-2"
+                      className="bg-blue-500 text-white text-xs ml-1 px-0,5"
                       onClick={() =>
                         handleAddToBill(
                           {
@@ -205,13 +199,15 @@ const handleClose = () => {
                         )
                       }
                     >
-                      Add to bill
+                      Add
                     </button>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
+      </div>
+       
       </div>
 
    
@@ -226,13 +222,30 @@ const handleClose = () => {
     payableAmount={payableAmount}
   />
 
-  <button
-    className="bg-blue-500 text-white p-2 mt-2"
+<div className="flex ">
+<button
+    className="bg-teal-400 text-white p-2 mt-2 rounded m-3"
     onClick={handleConfirmPurchase}
   >
-    Confirm purchase
+    Submit Bill
   </button>
 </div>
+ 
+</div>
+<div hidden>
+<div id="invoice-container" >
+  <Invoice
+    selectedProducts={selectedProducts}
+    cgst={cgst}
+    sgst={sgst}
+    calculateTotalPrice={calculateTotalPrice}
+    payableAmount={payableAmount}
+  />
+</div>
+</div>
+
+
+
 <Dialog
       open={open}
       onClose={handleClose}
