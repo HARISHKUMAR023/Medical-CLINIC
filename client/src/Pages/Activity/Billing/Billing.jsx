@@ -132,9 +132,9 @@ const handleClose = () => {
         {/* search the poducts */}
         <input type="search" name="" id="" className="border-2" placeholder="Search the Product" onChange={e => setSearchTerm(e.target.value)} />
         <label className="px-2" htmlFor="tablet">Tablet</label>
-        <input type="checkbox" name="tablet" id="tablet" onChange={() => setSelectedType('tablet')} />
-        <label className="px-2" htmlFor="serup">Serup</label>
-        <input type="checkbox" name="serup" id="serup" onChange={() => setSelectedType('serup')} />
+<input type="checkbox" name="tablet" id="tablet" onChange={e => setSelectedType(e.target.checked ? 'tablet' : '')} />
+<label className="px-2" htmlFor="serup">Serup</label>
+<input type="checkbox" name="serup" id="serup" onChange={e => setSelectedType(e.target.checked ? 'serup' : '')} />
 
       <div className="overflow-auto h-[550px]">
       <table className="table-auto ">
