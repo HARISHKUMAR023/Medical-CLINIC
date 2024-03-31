@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import  { useState, useEffect,useRef } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
@@ -10,7 +10,9 @@ import Button from '@mui/material/Button';
 import BillingPreview from "../../../components/billing/BillingPreview";
 import { useReactToPrint } from 'react-to-print';
 import Invoice from "../../../components/billing/Invoice";
-
+import Invoicemain from "../../../components/billing/Invoicemain";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 const Billing = () => {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,6 +21,25 @@ const Billing = () => {
   const [cgst, setCgst] = useState(0);
   const [sgst, setSgst] = useState(0);
   const [selectedType, setSelectedType] = useState("");
+ const [ invoicefechdata , setInvoicefechdata ] = useState([]);
+
+ const componentRef = useRef();
+
+  // Fetch products from the server
+  const fetchProductsall = async () => {
+    const baseURL = import.meta.env.VITE_BASE_URL;
+    const url = `${baseURL}/billingdata`;
+    const response = await axios.get(url);
+    setInvoicefechdata (response.data.bills);
+    console.log(response.data.bills)  
+    // console.log(response.data.stocks)
+  };
+
+  // Call fetchProducts when the component mounts
+  useEffect(() => {
+    fetchProductsall();
+  }, []);
+
   // Fetch products from the server
   const fetchProducts = async () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -125,6 +146,48 @@ const handleClose = () => {
     documentTitle: 'Pharmacy Invoice',
     onAfterPrint: () => setOpen(false), // Close confirmation dialog after printing
   });
+
+  const handlePrintall = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: 'Pharmacyall  Invoice',
+    onAfterPrint: () => setOpen(false), // Close confirmation dialog after printing
+  });
+  // const printDocument = () => {
+  //   const input = document.getElementById('divToPrint');
+  //   html2canvas(input)
+  //     .then((canvas) => {
+  //       const imgData = canvas.toDataURL('image/png');
+  //       const pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+  //       const pageWidth = pdf.internal.pageSize.getWidth();
+  //       const pageHeight = pdf.internal.pageSize.getHeight();
+  
+  //       let width = canvas.width;
+  //       let height = canvas.height;
+  
+  //       // calculate the width and height, max is the dimension of A4
+  //       if (width > height) {
+  //         if (width > pageWidth) {
+  //           height *= pageWidth / width;
+  //           width = pageWidth;
+  //         }
+  //       } else {
+  //         if (height > pageHeight) {
+  //           width *= pageHeight / height;
+  //           height = pageHeight;
+  //         }
+  //       }
+  
+  //       pdf.addImage(imgData, 'JPEG', 0, 0, width, height);
+  //       pdf.autoPrint();
+  //       window.open(pdf.output('bloburl'), '_blank');
+  //     });
+  // }
+
+  const handleClick = async () => {
+    await fetchProductsall();
+    handlePrintall(); 
+  };
+  
   return (
     <div className="flex bg-white my-2 m-2">
       
@@ -243,9 +306,18 @@ const handleClose = () => {
   />
 </div>
 </div>
+{/* bill container all */}
 
-
-
+   <div hidden >
+   <div ref={componentRef}>
+      <div id="invoiceall-container" >
+        <Invoicemain
+          Invoicedata={invoicefechdata}
+        />
+      </div>
+    </div>
+   </div>
+   <Button onClick={handleClick} color="primary" autoFocus>bill all </Button>
 <Dialog
       open={open}
       onClose={handleClose}

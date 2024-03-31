@@ -6,9 +6,10 @@ const Invoice = ({ selectedProducts, cgst, sgst,  payableAmount }) => {
     <div className="Invoice">
       <h2>Invoice</h2>
       <div className="invoice-header">
-        <img src={kpnlogo} alt="KRN Logo" className="logo" />
+     
         {/* Add other static content here, e.g., address, phone number */}
-        <div className="invoice-header">
+        <div className="invoice-header flex justify-between">
+        <img src={kpnlogo} alt="KRN Logo" className="logo" />
   <p style={{ fontSize: '16px' }}>Company Name</p>
 
 </div>
@@ -25,7 +26,7 @@ const Invoice = ({ selectedProducts, cgst, sgst,  payableAmount }) => {
         <tbody>
           {selectedProducts.map((product, index) => (
             <tr key={index}>
-              <td>{product.product.name}</td>
+              <td className=''>{product.product.compositionName}</td>
               <td>{product.quantity}</td>
               <td>{product.sellingPrice}</td>
               <td>{product.quantity * product.sellingPrice}</td>

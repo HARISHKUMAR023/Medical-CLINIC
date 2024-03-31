@@ -3,4 +3,8 @@
       font-size: 12px; /* Adjust size for printing */
     }
   }
-  
+  @media print {
+    .page-break-after {
+      page-break-after: always;
+    }
+  }
