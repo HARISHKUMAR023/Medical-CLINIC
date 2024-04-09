@@ -19,6 +19,7 @@ import Patients from './Pages/Users/Patients/Patients';
 import Purchase from './Pages/Activity/Purchase/Purchase';
 import AddPurchase from './Pages/Activity/Purchase/AddPurchase';
 import Billing from './Pages/Activity/Billing/Billing';
+import Pagenotfouned from './Pages/Pagenotfouned';
 import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -29,7 +30,7 @@ const Layout = () => {
     return <Navigate to="/" />;
   }
   return (
-    <div className="main flex flex-row h-screen overflow-hidden ">
+    <div className="bg-primary  flex flex-row h-screen overflow-hidden ">
       {/* <div className="container flex flex-row "> */}
         <div className="menucontainer  max-h-screen">
           <Menu />
@@ -115,6 +116,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+  },
+  {
+    path: "*",
+    element: <Pagenotfouned />,
   },
 ]);
 function App() {
