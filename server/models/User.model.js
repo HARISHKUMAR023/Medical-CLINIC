@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
   roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'RolePermission' }],
   createdAt: { type: Date, default: Date.now },
   createdBy: { type:String, required:true },
+  active: {
+    type: Boolean,
+    default:false
+}
 })
 
 

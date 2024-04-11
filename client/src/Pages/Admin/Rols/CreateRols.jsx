@@ -10,16 +10,28 @@ import TextField from '@mui/material/TextField';
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-const names = [
-  "read_only",
-  "edit_only",
-  "update_only",
-  "delete_only",
-  "full_access",
+const amdinpage = [
+  "read_adminpage",
+  "edit_adminpage",
+  "update_adminpage",
+  "delete_adminpage",
+  "full_adminpage",
+  "createuser_adminpage"
+];
+const masterpage = [
+  "read_masterpage",
+  "edit_masterpage",
+  "update_masterpage",
+  "delete_masterpage",
+  "full_masterpage",
+  "super_admin_all_page"
 ];
 
 const CreateRols = ({ onClose, onDataRefresh }) => {
   const loginusername = useSelector((state) => state.auth.user.name);
+  const usertype = useSelector((state) => state.auth.user.usertype);
+  // const permissions = useSelector(selectPermissions);
+  const permissionsuser = useSelector((state) => state.auth.user.permissions);
   const [role, setRole] = useState(""); // State to hold the role
   const [permissions, setPermissions] = useState([]); // State to hold the selected permissions
 
@@ -66,7 +78,7 @@ const CreateRols = ({ onClose, onDataRefresh }) => {
   return (
     <div className="fixed inset-0 flex justify-end bg-gray-800 bg-opacity-75 z-50">
        <ToastContainer />
-      <div className="bg-white rounded-lg w-3/12">
+      <div className="bg-white rounded-lg w-6/12">
         <div className="flex justify-between items-center mb-4 p-4 table-head">
           <h2 className="text-2xl font-bold">Create Roles</h2>
           <button
@@ -89,9 +101,9 @@ const CreateRols = ({ onClose, onDataRefresh }) => {
               className='w-80'
             />
           </div>
-
+<h3 className='font-bold text-red-500'>Admin page asses</h3>
           <div className="mx-3 my-2">
-            {names.map((name) => (
+            {amdinpage.map((name) => (
               <FormControlLabel
                 key={name}
                 control={
@@ -105,6 +117,26 @@ const CreateRols = ({ onClose, onDataRefresh }) => {
               />
             ))}
           </div>
+       
+          { permissionsuser.includes("super_admin_all_page")  && (
+            
+          <div className="mx-3 my-2">
+               <h3 className='font-bold text-red-500'>Master  page asses</h3>
+            {masterpage.map((name) => (
+              <FormControlLabel
+                key={name}
+                control={
+                  <Checkbox
+                    checked={permissions.includes(name)}
+                    onChange={handleCheckboxChange}
+                    value={name}
+                  />
+                }
+                label={name}
+              />
+            ))}
+          </div>
+         )}
 
           <div className=''
            

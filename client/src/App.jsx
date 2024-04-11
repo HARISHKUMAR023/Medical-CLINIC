@@ -123,32 +123,17 @@ const router = createBrowserRouter([
   },
 ]);
 function App() {
- 
+  // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  // if (!isLoggedIn) {
+  //   return <Navigate to="/" />; 
+  // }
+
 
   return (
     <>
      <RouterProvider router={router} />
-   {/* <BrowserRouter>
-      <Routes>
-       
-        <Route path="/" element={<Login />} />
 
-     
-        <Route
-          path="/*"
-          element={
-            <>
-              <Navbar/>
-              <Asite />
-              
-            </>
-          }
-        >
-          <Route path="home" element={<Home />} />
-       
-        </Route>
-      </Routes>
-    </BrowserRouter> */}
     </>
   )
 }

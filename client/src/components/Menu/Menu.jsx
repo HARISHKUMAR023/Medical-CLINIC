@@ -7,9 +7,9 @@ import { IoMdArrowDropright } from "react-icons/io";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import reports from "../../assets/images/icons/menu/reports.png";
+//import reports from "../../assets/images/icons/menu/reports.png";
 import { GoDotFill } from "react-icons/go";
-import toggle from "../../assets/images/icons/menu/Menu.png";
+//import toggle from "../../assets/images/icons/menu/Menu.png";
 import { FaUserShield } from "react-icons/fa6";
 import { AiFillDatabase } from "react-icons/ai";
 import { FaUserGroup } from "react-icons/fa6";
@@ -22,7 +22,7 @@ const Menu = () => {
   const location = useLocation();
   const usertype = useSelector((state) => state.auth.user.usertype);
   // const permissions = useSelector(selectPermissions);
-  const permissions = useSelector((state) => state.auth.user.permissions[0]);
+  const permissions = useSelector((state) => state.auth.user.permissions);
   console.log(permissions);
   const [isMenuOpen, setIsMenuOpen] = useState(true);
 
@@ -76,7 +76,9 @@ const Menu = () => {
         </div>
 
         <ul className={`mt-10 z-40  text-primary-text`}>
-          {permissions.includes("read_only") && (
+        {/* permissions.includes(["read_only", "full_access"]) && */}
+        {/* &&(usertype === "admin" || usertype === "user") */}
+          { permissions.includes("read_only") ||  permissions.includes("super_admin_all_page") &&  (
             <li
               className={`flex items-center rounded pr-7 ${
                 location.pathname === "/dashboard/home"
@@ -136,7 +138,7 @@ const Menu = () => {
             </Link>
           </li>
 
-          {usertype == "user" && (
+          {  (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
               <Link
                to="admin"
@@ -265,7 +267,7 @@ const Menu = () => {
   </li>
 )} */}
 
-          {usertype == "user" && (
+{ (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) &&(
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
               <Link
                 className="flex items-center m-2"
@@ -378,7 +380,7 @@ const Menu = () => {
             </li>
           )}
 
-          {usertype == "user" && (
+{ (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
               <Link
                 className="flex items-center m-2"
@@ -448,7 +450,7 @@ const Menu = () => {
           {/* <li className="flex items-center   rounded ">
           <Link to="/users"className="flex items-center mb-4 m-2 "><svg className="mr-2" xmlns="http://www.w3.org/2000/svg" width="19px" height="19px" viewBox="0 0 14 14"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M5.25 8.25H1a.5.5 0 0 0-.5.5V13a.5.5 0 0 0 .5.5h4.25a.5.5 0 0 0 .5-.5V8.75a.5.5 0 0 0-.5-.5m7.75 0H8.75a.5.5 0 0 0-.5.5V13a.5.5 0 0 0 .5.5H13a.5.5 0 0 0 .5-.5V8.75a.5.5 0 0 0-.5-.5M9.13.5H4.88a.5.5 0 0 0-.5.5v4.25a.5.5 0 0 0 .5.5h4.25a.5.5 0 0 0 .5-.5V1a.5.5 0 0 0-.5-.5"/></svg> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Activity </span></Link>
         </li> */}
-          {usertype == "user" && (
+         { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) &&(
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
               <Link
                 className="flex items-center m-2"

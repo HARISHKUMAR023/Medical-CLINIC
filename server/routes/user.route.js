@@ -10,5 +10,5 @@ router.get('/getuser',userController.getuserdata);
 router.delete('/users/:userid', userController.deleteUser);
 // Other user-related routes (e.g., GET /api/users/:userId, update profile)
 // ...
-
+router.put('/users/:id/toggle', userController.toggleUserActiveStatus);
 module.exports = router;

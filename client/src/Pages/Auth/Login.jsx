@@ -1,5 +1,6 @@
 import * as React from 'react';
 import "./Login.css";
+import { toast ,ToastContainer} from 'react-toastify';
 import axios from 'axios'; // Or use fetch API
 import { useDispatch  } from 'react-redux';
 import Dockerimg from "../../assets/illustration/AUTH-illustration/Docker-illustration.svg";
@@ -53,7 +54,7 @@ const Login = () => {
          token : response.data.token,
          usertype:response.data.roles
        }
-      console.log( user);
+      console.log(" the user after login", user);
   
       // Assuming your backend returns 'usernames' and 'token'
       // const { usernames, token } = response.data;
@@ -63,21 +64,24 @@ const Login = () => {
 
       console.log("Login successful");
      
-      navigate("/dashboard");
+      navigate("/dashboard/home");
     } catch (error) {
       if (error.response) {
         console.error('Authentication failed with status code:', error.response.status);
+        toast.error(error.response?.data?.message || 'An error occurred.');
       } else if (error.request) {
         console.error('No response received from the server.');
+        toast.error( 'No response received from the server');
       } else {
         console.error('Error during request setup:', error.message);
+        toast.error( 'Error during request setup',error.message);
       }
       dispatch(loginFailure(error.message));
     }
   };
   return (
     <div className="Login py-24   px-24 ">
-
+<ToastContainer />
 <div className="h-full w-full   bg-white flex  shadow-md rounded-md ">
 <img src={bgtgreen} className="absolute top-0 left-0 z-10  w-auto h-auto " alt="" />
   <div className="Login-left basis-2/4 bg-auto bg-no-repeat  z-40 " >

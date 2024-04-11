@@ -47,36 +47,29 @@ const register = async (req, res) => {
         return res.status(400).json({ message: 'Error uploading file', error: err.message });
       }
 
-      const { name, email, mobile, password, confirmPassword, roles ,createdBy } = req.body;
+      const { name, email, mobile, password, confirmPassword, roles, createdBy } = req.body;
+
+      // Check if the role is provided
+      if (!roles || roles.length === 0) {
+        return res.status(400).json({ message: 'Role is required' });
+      }
 
       // Check if passwords match
       if (password !== confirmPassword) {
         return res.status(400).json({ message: 'Passwords do not match' });
       }
-// Check if the email already exists
-const existingUser = await User.findOne({ email });
-if (existingUser) {
-  return res.status(400).json({ message: 'Email already exists' });
-}
+
+      // Check if the email already exists
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Check if the default user role exists, if not, create it
-      let defaultUserRole = await RolePermission.findOne({ role: 'user', permissions: 'read_only' });
-
-      if (!defaultUserRole) {
-        try {
-          const newDefaultUserRole = new RolePermission({ role: 'user', permissions: 'read_only' });
-          defaultUserRole = await newDefaultUserRole.save();
-        } catch (error) {
-          console.error('Error creating default user role:', error);
-          return res.status(400).json({ message: 'Error creating default user role' });
-          // throw new Error('Error creating default user role');
-        }
-      }
-
       // Get profile image filename
-      let profilePic= 'default-profile.png'; // Default profile image
+      let profilePic = 'default-profile.png'; // Default profile image
       if (req.file) {
         profilePic = req.file.filename; // Use uploaded file's filename
       }
@@ -88,8 +81,8 @@ if (existingUser) {
         email,
         password: hashedPassword,
         profilePic,
-        roles: roles || [defaultUserRole._id], // Assign the default user role
-        createdBy:createdBy
+        roles,
+        createdBy
       });
 
       // Save the new user to the database
@@ -104,6 +97,7 @@ if (existingUser) {
     res.status(500).json({ message: 'Error creating user' });
   }
 };
+
 
 const getuserdata = async (req, res) => {
   try {
@@ -132,4 +126,23 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { register, getuserdata, deleteUser };
+// Activate or deactivate a product
+
+
+const toggleUserActiveStatus = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    user.active = !user.active;
+    await user.save();
+    res.status(200).json({ message: 'User status toggled successfully', user });
+  } catch (err) {
+    console.error('Error toggling user status:', err);
+    res.status(500).json({ message: 'Error toggling user status', error: err.message });
+  }
+};
+
+module.exports = { register, getuserdata, deleteUser,toggleUserActiveStatus };
