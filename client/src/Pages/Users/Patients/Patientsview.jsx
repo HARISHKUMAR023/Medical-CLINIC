@@ -74,7 +74,7 @@ const Patientsview = () => {
     : "";
 
   return (
-    <div className="flex bg-white mx-2 w-auto mb-32" style={{ height: "600px" }}>
+    <div className="flex bg-white mx-2 w-auto mb-32 dark:bg-[#1e1e1e] dark:text-white" style={{ height: "600px" }}>
       {showPopup && (
         <CreatePatient
           onClose={togglePopup}

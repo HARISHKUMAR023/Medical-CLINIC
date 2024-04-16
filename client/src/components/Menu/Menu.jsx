@@ -53,35 +53,35 @@ const Menu = () => {
         <div className="mask"></div>
     </div> */}
       <button
-        className={`togglemenu mt-3 top-0 z-50 ${
+        className={`togglemenu mt-3 top-0 z-50  ${
           isMenuOpen ? "fixed top-0 left-48" : "fixed top-0 left-20"
         } ${!isMenuOpen ? "MenuClosed" : ""}`}
         onClick={handleToggle}
       >
-        <GiHamburgerMenu className="text-2xl text-white " />
+        <GiHamburgerMenu className="text-2xl text-orange-600 " />
       </button>
       <div
-        className={`text-black font-normal flex flex-col items-start h-screen w-auto Menu pl-2 `}
+        className={`text-[#848089] font-normal flex flex-col items-start h-screen Menu pl-2 `}
       >
         {/* <img src={img1} alt="" className={` absolute top-0 left-0 ${isMenuOpen ? 'block' : 'hidden'} `} />
 <img src={ button} alt="" className={` fixed bottom-0  w-52 h-52 ${isMenuOpen ? 'block' : 'hidden'}`} />
  <img src={center} alt="" className={` absolute w-52 top-52  ${isMenuOpen ? 'block' : 'hidden'}`} />   */}
-        <div className={`flex flex-row justify-center items-center z-10  `}>
+        <div className={`flex flex-row justify-center items-center z-10 pt-5 `}>
           <img src={krnlogo} className={`w-16 h-16  `} alt="" />
           <div
             className={`flex flex-col pl-2 ${isMenuOpen ? "block" : "hidden"}`}
           >
-            <h2 className="font-extrabold text-red-600  text-2xl">K.R.N</h2>
-            <p className="text-sm text-white  font-semibold">MEDICAL CLINIC</p>
+            <h2 className="font-extrabold text-orange-600  text-2xl">K.R.N</h2>
+            <p className="text-sm text-black dark:text-white font-semibold">MEDICAL CLINIC</p>
           </div>
         </div>
 
-        <ul className={`mt-10 z-40   dark:text-primary-text`}>
+        <ul className={`mt-10 z-40   dark:text-primary-text `}>
         {/* permissions.includes(["read_only", "full_access"]) && */}
         {/* &&(usertype === "admin" || usertype === "user") */}
         { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li
-              className={`flex items-center rounded pr-7 ${
+              className={`flex items-center rounded   ${
                 location.pathname === "/dashboard/home"
                   ? "border-r-4 border-white"
                   : ""
@@ -89,7 +89,7 @@ const Menu = () => {
             >
               <NavLink
                 to="/dashboard/home"
-                className="flex items-center mb-4 m-2"
+                className="flex items-center m-2 w-full focus:text-orange-500 focus:bg-orange-100 rounded-md"
               >
                 {/* <img src={dashbord} className="mr-2" alt="" /> */}
                 <RiDashboardFill className="ml-2 mr-3 text-2xl"/>
@@ -102,18 +102,22 @@ const Menu = () => {
           <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5" >
             <Link
               to="users"
-              className="flex items-center m-2"
+              className="flex items-center m-2 custom justify-between"
               onClick={() => handleSubMenuClick(1)} // Pass a unique index for each submenu
             >
-              <MdSettingsSuggest  className="ml-2 mr-3 text-2xl"/>
-              <span className={`${isMenuOpen ? "block" : "hidden"}`}>
-                Settings{" "}
-              </span>
-              {selectedRow === 1 ? (
-                <IoMdArrowDropdown className="ml-2 mt-1" />
-              ) : (
-                <IoMdArrowDropright className="ml-2 mt-1" />
-              )}
+              <div className="flex">
+                <MdSettingsSuggest  className="ml-2 mr-3 text-2xl"/>
+                <span className={`${isMenuOpen ? "block" : "hidden"}`}>
+                  Settings{" "}
+                </span>
+              </div>
+              <div className="mr-4">
+                {selectedRow === 1 ? (
+                  <IoMdArrowDropdown className="ml-2 mt-1" />
+                ) : (
+                  <IoMdArrowDropright className="ml-2 mt-1" />
+                )}
+              </div>
             </Link>
 
             <Link
@@ -143,18 +147,24 @@ const Menu = () => {
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
               <Link
                to="admin"
-                className="flex items-center m-2"
+                className="flex items-center m-2 justify-between custom "
                 onClick={() => handleSubMenuClick(2)} // Pass a unique index for each submenu
               >
-       <FaUserShield className="ml-2 mr-3 text-2xl" />{" "}
-                <span className={`${isMenuOpen ? "block" : "hidden"}`}>
-                  Admin
-                </span>
-                {selectedRow === 2 ? (
-                  <IoMdArrowDropdown className="ml-2 mt-1" />
-                ) : (
-                  <IoMdArrowDropright className="ml-2 mt-1" />
-                )}
+                
+                  <div className="flex ">
+                    <FaUserShield className="ml-2 mr-3 text-2xl" />{" "}
+                    <span className={`${isMenuOpen ? "block" : "hidden"}` }>
+                      Admin
+                    </span>
+                  </div>
+                  <div className="mr-4">
+                    {selectedRow === 2 ? (
+                      <IoMdArrowDropdown className="ml-2 mt-1" />
+                    ) : (
+                      <IoMdArrowDropright className="ml-2 mt-1" />
+                    )}
+                  </div>
+               
               </Link>
 
               {/* <Link
@@ -182,19 +192,19 @@ const Menu = () => {
               </Link> */}
               <Link
                 to="admin"
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-10 custom2  ${
                   selectedRow === 2 ? "block" : "hidden"
                 }`}
               >
                 {/* Add an icon if needed, e.g., <IoProfileOutline className="mr-2" /> */}
                 <span
-                  className={`flex items-center ${
+                  className={`flex items-center  ${
                     isMenuOpen ? "block" : "hidden"
                   }`}
                 >
                   {" "}
                   <GoDotFill
-                    className={`w-2 h-2 mr-3 ${
+                    className={`w-2 h-2 mr-3  ${
                       isMenuOpen ? "block" : "hidden"
                     }`}
                   />{" "}
@@ -205,7 +215,7 @@ const Menu = () => {
               </Link>
               <Link
                 to="adminuser"
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-10 custom2 ${
                   selectedRow === 2 ? "block" : "hidden"
                 }`}
               >
@@ -269,31 +279,35 @@ const Menu = () => {
 )} */}
 
 { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) &&(
-            <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
+            <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5 ">
               <Link
-                className="flex items-center m-2"
+                className="flex items-center m-2 custom justify-between"
                 onClick={() => handleSubMenuClick(3)} // Pass a unique index for each submenu
               >
-               <AiFillDatabase className="ml-2 mr-3 text-2xl" /> {" "}
-                <span className={`${isMenuOpen ? "block" : "hidden"}`}>
-                  Master
-                </span>
-                {selectedRow === 3 ? (
-                  <IoMdArrowDropdown className="ml-2 mt-1" />
-                ) : (
-                  <IoMdArrowDropright className="ml-2 mt-1" />
-                )}
+                <div className="flex">
+                  <AiFillDatabase className="ml-2 mr-3 text-2xl" /> {" "}
+                  <span className={`${isMenuOpen ? "block" : "hidden"}`}>
+                    Master
+                  </span>
+                </div>
+                <div className="mr-4">
+                  {selectedRow === 3 ? (
+                    <IoMdArrowDropdown className="ml-2 mt-1" />
+                  ) : (
+                    <IoMdArrowDropright className="ml-2 mt-1" />
+                  )}
+                </div>
               </Link>
 
               <Link
                 to="FinancialYear"
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-10 custom2 ${
                   selectedRow === 3 ? "block" : "hidden"
                 }`}
               >
                 {/* Add an icon if needed, e.g., <IoProfileOutline className="mr-2" /> */}
                 <span
-                  className={`flex items-center ${
+                  className={`flex items-center  ${
                     isMenuOpen ? "block" : "hidden"
                   }`}
                 >
@@ -310,7 +324,7 @@ const Menu = () => {
               </Link>
               <Link
                 to="Products"
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-10 custom2 ${
                   selectedRow === 3 ? "block" : "hidden"
                 }`}
               >
@@ -333,7 +347,7 @@ const Menu = () => {
               </Link>
               <Link
                 to="Manufacturer"
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-10 custom2 ${
                   selectedRow === 3 ? "block" : "hidden"
                 }`}
               >
@@ -357,7 +371,7 @@ const Menu = () => {
               {/* Paymenttype */}
               <Link
                 to="Paymenttype"
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-10 custom2 ${
                   selectedRow === 3 ? "block" : "hidden"
                 }`}
               >
@@ -384,22 +398,26 @@ const Menu = () => {
 { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
               <Link
-                className="flex items-center m-2"
+                className="flex items-center m-2 custom justify-between"
                 onClick={() => handleSubMenuClick(4)} // Pass a unique index for each submenu
-              >
-                <FaUserGroup  className="ml-2 mr-3 text-2xl"/>{" "}
-                <span className={`${isMenuOpen ? "block" : "hidden"}`}>
-                  Users
-                </span>
-                {selectedRow === 4 ? (
-                  <IoMdArrowDropdown className="ml-2 mt-1" />
-                ) : (
-                  <IoMdArrowDropright className="ml-2 mt-1" />
-                )}
+              > 
+                <div className="flex">
+                  <FaUserGroup  className="ml-2 mr-3 text-2xl"/>{" "}
+                  <span className={`${isMenuOpen ? "block" : "hidden"}`}>
+                    Users
+                  </span>
+                </div>
+                <div className="mr-4">
+                  {selectedRow === 4 ? (
+                    <IoMdArrowDropdown className="ml-2 mt-1" />
+                  ) : (
+                    <IoMdArrowDropright className="ml-2 mt-1" />
+                  )}
+                </div>
               </Link>
               <Link
                 to="Patients"
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-10 custom2 ${
                   selectedRow === 4 ? "block" : "hidden"
                 }`}
               >
@@ -422,7 +440,7 @@ const Menu = () => {
               </Link>
               <Link
                 to="Suppliersview"
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-10 custom2 ${
                   selectedRow === 4 ? "block" : "hidden"
                 }`}
               >
@@ -454,22 +472,26 @@ const Menu = () => {
          { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
               <Link
-                className="flex items-center m-2"
+                className="flex items-center m-2 custom2 justify-between"
                 onClick={() => handleSubMenuClick(5)} // Pass a unique index for each submenu
               >
-                <MdLocalActivity  className="ml-2 mr-3 text-2xl"/>{" "}
-                <span className={`${isMenuOpen ? "block" : "hidden"}`}>
-                  Activity{" "}
-                </span>
-                {selectedRow === 5 ? (
-                  <IoMdArrowDropdown className="ml-2 mt-1" />
-                ) : (
-                  <IoMdArrowDropright className="ml-2 mt-1" />
-                )}
+                <div className="flex">
+                  <MdLocalActivity  className="ml-2 mr-3 text-2xl"/>{" "}
+                  <span className={`${isMenuOpen ? "block" : "hidden"}`}>
+                    Activity{" "}
+                  </span>
+                </div>
+                <div className="mr-4">
+                  {selectedRow === 5 ? (
+                    <IoMdArrowDropdown className="ml-2 mt-1" />
+                  ) : (
+                    <IoMdArrowDropright className="ml-2 mt-1" />
+                  )}
+                </div>
               </Link>
               <Link
                 to="Purchase"
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-5 custom2 ${
                   selectedRow === 5 ? "block" : "hidden"
                 }`}
               >
@@ -492,7 +514,7 @@ const Menu = () => {
               <Link
                 to="Billing"
                 onClick={() => window.gtag('event', 'visit_billing_page')}
-                className={`mb-4 m-2 ml-5 ${
+                className={`mb-4 m-2 ml-5 custom ${
                   selectedRow === 5 ? "block" : "hidden"
                 }`}
               >
@@ -515,7 +537,7 @@ const Menu = () => {
             </li>
           )}
           <li className="flex items-center   rounded mt-5">
-            <Link to="/users" className="flex items-center mb-4 m-2 ">
+            <Link to="/users" className="flex items-center mb-4 m-2 custom">
             <MdBookmarkAdded className="ml-2 mr-3 text-2xl" />{" "}
               <span className={`${isMenuOpen ? "block pr-28" : "hidden"}`}>
                 Appoiment {" "}
@@ -523,7 +545,7 @@ const Menu = () => {
             </Link>
           </li>
           <li className="flex items-center   rounded mt-5">
-            <Link to="/users" className="flex items-center mb-4 m-2 ">
+            <Link to="/users" className="flex items-center mb-4 m-2 custom">
             <FaFileMedical className="ml-2 mr-3 text-2xl" />{" "}
               <span className={`${isMenuOpen ? "block pr-28" : "hidden"}`}>
                 Reports{" "}

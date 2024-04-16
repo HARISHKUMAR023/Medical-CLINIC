@@ -34,17 +34,17 @@ const Layout = () => {
   }
   return (
     <div className={darkMode ? 'dark' : ''}>
-<div  className="bg-white  dark:bg-black text-black dark:text-white  flex flex-row h-screen overflow-hidden ">
+<div  className="bg-white  dark:bg-[#1e1e1e] text-black dark:text-white  flex flex-row h-screen overflow-hidden ">
       {/* <div className="container flex flex-row "> */}
         <div className="menucontainer  max-h-screen">
           <Menu />
         </div>
-        <div className="content-Container basis-full h-auto w-64 dark:bg-black dark:text-white">
+        <div className="content-Container basis-full h-auto w-64 dark:bg-[#1e1e1e] dark:text-white">
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
           <ToastContainer />
-          <div className="overflow-y-auto">
-      <Outlet />
-    </div>
+          <div className="overflow-y-auto bg-[#E5EAEF] dark:bg-[#333333] pt-2 rounded-s-xl">
+            <Outlet />
+          </div>
           <Footer />
         </div>
       {/* </div> */}
@@ -79,7 +79,7 @@ const router = createBrowserRouter([
       },
       {
         path: "FinancialYear",
-        element: <FinancialYear  />,
+        element: <FinancialYear />,
       },
       {
         path: "Products",
