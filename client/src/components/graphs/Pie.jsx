@@ -65,7 +65,7 @@ const Pie = () => {
   ];
 
   return (
-    <div className="mixed-chart  bg-white z-10 rounded-md">
+    <div className="mixed-chart dark:bg-black dark:text-white bg-white z-10 rounded-md">
       <Chart options={options} series={series} type="area" width="400" />
     </div>
   );

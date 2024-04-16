@@ -25,7 +25,13 @@ import {logout } from '../../app/authSlice';
 import bell from '../../assets/images/icons/menu/Bell.png';
 import comment from '../../assets/images/icons/menu/comment.png';
 import profile from '../../assets/images/icons/menu/profile.png';
-const Navbar = () => {
+import { MdDarkMode } from "react-icons/md";
+import { CiLight } from "react-icons/ci";
+const Navbar = ({ darkMode, setDarkMode }) => {
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   
@@ -99,6 +105,7 @@ const Navbar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+      
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
@@ -134,9 +141,9 @@ const Navbar = () => {
     </Menu>
   );
   return (
-    <Box  sx={{ flexGrow: 1 }} >
+    <Box  sx={{ flexGrow: 1 }} className="" >
     <AppBar position="static" className='shadow-none' elevation={0} >
-      <Toolbar  className='navbar-main text-black'>
+      <Toolbar  className='navbar-main text-black dark:bg-black dark:text-white'>
      
        
         <div role="presentation" >
@@ -144,12 +151,12 @@ const Navbar = () => {
           variant="p"
           noWrap
           component="div"
-          sx={{ display: { xs: 'none', sm: 'block' } }} className='font-bold '
+          sx={{ display: { xs: 'none', sm: 'block' } }} className='font-bold dark:text-white'
         >
           Dashbord
         </Typography>
-      <Breadcrumbs aria-label="breadcrumb" className='text-sm'>
-        <Link underline="hover" color="inherit" fontSize={14} href="/" className='text-sm'>
+      <Breadcrumbs aria-label="breadcrumb" className='text-sm dark:text-white'>
+        <Link underline="hover" color="inherit" fontSize={14} href="/" className='text-sm dark:text-white'>
        Dashbord
         </Link>
       
@@ -157,8 +164,8 @@ const Navbar = () => {
           underline="hover"
           color="text.primary"
           href="/material-ui/react-breadcrumbs/"
-          aria-current="page"
-          className='text-sm'
+          aria-current="page "
+          className='text-sm dark:text-white'
         >
          Chart view
         </Link>
@@ -167,6 +174,9 @@ const Navbar = () => {
    
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+        <button onClick={toggleDarkMode} className='text-2xl '>
+        {darkMode ? <CiLight /> : <MdDarkMode /> }
+      </button>
           <IconButton size="large" aria-label="show 4 new mails" color="inherit">
             <Badge badgeContent={4} color="error">
               <ChatOutlinedIcon className='icon' />

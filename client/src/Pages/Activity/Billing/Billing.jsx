@@ -189,15 +189,18 @@ const handleClose = () => {
   };
   
   return (
-    <div className="flex bg-white my-2 m-2">
+    <div className="flex bg-white my-2 m-2 
+
+    shadow-md
+    ">
       
-      <div className="pt-2 px-2" >
+      <div className="pt-2 px-2 text-black  w-7/12" >
         {/* search the poducts */}
-        <input type="search" name="" id="" className="border-2" placeholder="Search the Product" onChange={e => setSearchTerm(e.target.value)} />
+        <input type="search" name="" id="" className="border-2 rounded-md p-2 font-medium" placeholder="Search the Product" onChange={e => setSearchTerm(e.target.value)} />
         <label className="px-2" htmlFor="tablet">Tablet</label>
-<input type="checkbox" name="tablet" id="tablet" onChange={e => setSelectedType(e.target.checked ? 'tablet' : '')} />
+<input className=" w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="checkbox" name="tablet" id="tablet" onChange={e => setSelectedType(e.target.checked ? 'tablet' : '')} />
 <label className="px-2" htmlFor="serup">Serup</label>
-<input type="checkbox" name="serup" id="serup" onChange={e => setSelectedType(e.target.checked ? 'serup' : '')} />
+<input type="checkbox" name="serup" id="serup" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onChange={e => setSelectedType(e.target.checked ? 'serup' : '')} />
 
       <div className="overflow-auto h-[550px]">
       <table className="table-auto ">
@@ -217,23 +220,23 @@ const handleClose = () => {
                .filter(stock => selectedType === "" || stock.productitem.type === selectedType)
                .filter(stock => stock.productitem.compositionName.toLowerCase().includes(searchTerm.toLowerCase()))
                .map((stock) =>  (
-                <tr key={stock._id} className="text-sm">
-                  <td className="border px-4 py-2">
+                <tr key={stock._id} className="text-sm capitalize border antialiased font-medium">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                     {stock.productitem.compositionName}
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                     {stock.productitem.brand}
                   </td>
-                  <td className="border px-4 py-2">{stock.productitem.type}</td>
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">{stock.productitem.type}</td>
                <td hidden>{stock.sellPrice}</td>
                <td hidden>{stock.MRP}</td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                    {stock.quantity} {stock.quantity > 0 ? "Available" : "Out of stock"}
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                     {new Date(stock.expiryDate).toLocaleDateString()}
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                     <button
                       className=""
                       onClick={() => handleQuantityChange(stock, 1)}
@@ -249,7 +252,7 @@ const handleClose = () => {
                       -
                     </button>
                     <button
-                      className="bg-blue-500 text-white text-xs ml-1 px-0,5"
+                      className="bg-red-500 rounded-sm font-medium text-white text-xs ml-1 px-1 py-1"
                       onClick={() =>
                         handleAddToBill(
                           {
@@ -274,7 +277,7 @@ const handleClose = () => {
       </div>
 
    
-<div className=" Billing Preview">
+<div className=" Billing Preview text-black w-6/12">
 <BillingPreview
     selectedProducts={selectedProducts}
    
@@ -317,7 +320,7 @@ const handleClose = () => {
       </div>
     </div>
    </div>
-   <Button onClick={handleClick} color="primary" autoFocus>bill all </Button>
+   {/* <Button onClick={handleClick} color="primary" autoFocus>bill all </Button> */}
 <Dialog
       open={open}
       onClose={handleClose}

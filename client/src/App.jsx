@@ -1,5 +1,6 @@
 
 import './App.css'
+import { useState } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet ,Navigate } from "react-router-dom";
 import Login from './Pages/Auth/Login';
 import Home from './Pages/Home/Home';
@@ -22,21 +23,24 @@ import Billing from './Pages/Activity/Billing/Billing';
 import Pagenotfouned from './Pages/Pagenotfouned';
 import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
+import ReactGA from 'react-ga';
+ReactGA.initialize('G-EZ432Z7GGJ');
+ReactGA.pageview(window.location.pathname + window.location.search);
 const Layout = () => {
+  const [darkMode, setDarkMode] = useState(false);
   const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn )
   if (!isLoggedIn) {
     return <Navigate to="/" />;
   }
   return (
-    <div className="bg-primary  flex flex-row h-screen overflow-hidden ">
+    <div className={darkMode ? 'dark' : ''}>
+<div  className="bg-white  dark:bg-black text-black dark:text-white  flex flex-row h-screen overflow-hidden ">
       {/* <div className="container flex flex-row "> */}
         <div className="menucontainer  max-h-screen">
           <Menu />
         </div>
-        <div className="content-Container basis-full h-auto w-64">
-          <Navbar />
+        <div className="content-Container basis-full h-auto w-64 dark:bg-black dark:text-white">
+          <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
           <ToastContainer />
           <div className="overflow-y-auto">
       <Outlet />
@@ -46,6 +50,8 @@ const Layout = () => {
       {/* </div> */}
       
     </div>
+    </div>
+    
   );
 };
 
@@ -132,7 +138,7 @@ function App() {
 
   return (
     <>
-     <RouterProvider router={router} />
+     <RouterProvider router={router}  />
 
     </>
   )

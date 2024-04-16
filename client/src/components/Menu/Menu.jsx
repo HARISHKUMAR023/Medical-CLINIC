@@ -1,5 +1,5 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Icon } from "@mui/material";
+// import { Icon } from "@mui/material";
 import "./Menu.css";
 import krnlogo from "../../assets/images/KRN-LOGO.svg";
 // import { FaUsers } from "react-icons/fa";
@@ -18,9 +18,10 @@ import { FaFileMedical } from "react-icons/fa6";
 import { MdSettingsSuggest } from "react-icons/md";
 import { RiDashboardFill } from "react-icons/ri";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { MdBookmarkAdded } from "react-icons/md";
 const Menu = () => {
   const location = useLocation();
-  const usertype = useSelector((state) => state.auth.user.usertype);
+  // const usertype = useSelector((state) => state.auth.user.usertype);
   // const permissions = useSelector(selectPermissions);
   const permissions = useSelector((state) => state.auth.user.permissions);
   console.log(permissions);
@@ -75,10 +76,10 @@ const Menu = () => {
           </div>
         </div>
 
-        <ul className={`mt-10 z-40  text-primary-text`}>
+        <ul className={`mt-10 z-40   dark:text-primary-text`}>
         {/* permissions.includes(["read_only", "full_access"]) && */}
         {/* &&(usertype === "admin" || usertype === "user") */}
-          { permissions.includes("read_only") ||  permissions.includes("super_admin_all_page") &&  (
+        { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li
               className={`flex items-center rounded pr-7 ${
                 location.pathname === "/dashboard/home"
@@ -450,7 +451,7 @@ const Menu = () => {
           {/* <li className="flex items-center   rounded ">
           <Link to="/users"className="flex items-center mb-4 m-2 "><svg className="mr-2" xmlns="http://www.w3.org/2000/svg" width="19px" height="19px" viewBox="0 0 14 14"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M5.25 8.25H1a.5.5 0 0 0-.5.5V13a.5.5 0 0 0 .5.5h4.25a.5.5 0 0 0 .5-.5V8.75a.5.5 0 0 0-.5-.5m7.75 0H8.75a.5.5 0 0 0-.5.5V13a.5.5 0 0 0 .5.5H13a.5.5 0 0 0 .5-.5V8.75a.5.5 0 0 0-.5-.5M9.13.5H4.88a.5.5 0 0 0-.5.5v4.25a.5.5 0 0 0 .5.5h4.25a.5.5 0 0 0 .5-.5V1a.5.5 0 0 0-.5-.5"/></svg> <span className={`${isMenuOpen ? 'block' : 'hidden'}`}>Activity </span></Link>
         </li> */}
-         { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) &&(
+         { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
               <Link
                 className="flex items-center m-2"
@@ -490,6 +491,7 @@ const Menu = () => {
               </Link>
               <Link
                 to="Billing"
+                onClick={() => window.gtag('event', 'visit_billing_page')}
                 className={`mb-4 m-2 ml-5 ${
                   selectedRow === 5 ? "block" : "hidden"
                 }`}
@@ -512,7 +514,14 @@ const Menu = () => {
               </Link>
             </li>
           )}
-         
+          <li className="flex items-center   rounded mt-5">
+            <Link to="/users" className="flex items-center mb-4 m-2 ">
+            <MdBookmarkAdded className="ml-2 mr-3 text-2xl" />{" "}
+              <span className={`${isMenuOpen ? "block pr-28" : "hidden"}`}>
+                Appoiment {" "}
+              </span>
+            </Link>
+          </li>
           <li className="flex items-center   rounded mt-5">
             <Link to="/users" className="flex items-center mb-4 m-2 ">
             <FaFileMedical className="ml-2 mr-3 text-2xl" />{" "}

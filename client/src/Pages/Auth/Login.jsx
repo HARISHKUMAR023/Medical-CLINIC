@@ -61,7 +61,12 @@ const Login = () => {
       // const { usernames, token } = response.data;
 
       dispatch(loginSuccess({name:response.data.name,email:response.data.email, token: response.data.token , usertype:response.data.roles.role, permissions:response.data.roles.permissions}));
-
+// After successful login
+// After successful login
+window.gtag('event', 'login', {
+  'method': 'Email',
+  'email': response.data.email, // Send email as event parameter
+});
       console.log("Login successful");
      
       navigate("/dashboard/home");
