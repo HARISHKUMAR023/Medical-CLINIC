@@ -143,7 +143,7 @@ const Navbar = ({ darkMode, setDarkMode }) => {
   return (
     <Box  sx={{ flexGrow: 1 }} className="" >
     <AppBar position="static" className='shadow-none' elevation={0} >
-      <Toolbar  className='navbar-main text-black dark:bg-black dark:text-white'>
+      <Toolbar  className='navbar-main text-black dark:bg-[#1e1e1e] dark:text-white'>
      
        
         <div role="presentation" >

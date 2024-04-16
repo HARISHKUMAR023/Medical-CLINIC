@@ -54,3 +54,14 @@
   
   /* Add any other styles as needed */
   
+
+.custom:hover,
+.custom:focus {
+ /* Replace with your desired background color */
+  color: #FF630D; /* Replace with your desired text color */
+  border-radius: 0.375rem;
+}
+
+.custom2:hover, .custom2:focus{
+  color: #FF630D;
+}

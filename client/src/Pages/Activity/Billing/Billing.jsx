@@ -189,10 +189,7 @@ const handleClose = () => {
   };
   
   return (
-    <div className="flex bg-white my-2 m-2 
-
-    shadow-md
-    ">
+    <div className="flex bg-white my-2 m-2 shadow-md ">
       
       <div className="pt-2 px-2 text-black  w-7/12" >
         {/* search the poducts */}
