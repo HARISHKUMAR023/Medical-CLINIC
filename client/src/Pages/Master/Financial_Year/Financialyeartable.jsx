@@ -1,112 +1,52 @@
-import { useState,useEffect } from "react";
-import PropTypes from "prop-types";
-import Switch, { switchClasses } from "@mui/joy/Switch";
-import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import NativeSelect from "@mui/material/NativeSelect";
+import  { useState } from 'react';
+import PropTypes from 'prop-types';
+
+import Switch, { switchClasses } from '@mui/joy/Switch';
+
+// import del from "../../assets/images/icons/tableicone/delete.svg";
+// import * as React from 'react';
+import Box from '@mui/material/Box';
+// import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
 import { BsFilterLeft } from "react-icons/bs";
 import { LuFilter } from "react-icons/lu";
 import { MdOutlineFormatListBulleted } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-import Createuser from "./Createuser";
-import { MdDelete } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
-import Deletepop from "../../../components/Deletepop/Deletepop";
-import axios from "axios";
+// import { GrNext } from "react-icons/gr";
+// import { GrPrevious } from "react-icons/gr";
 
-const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
-  const [showPopup, setShowPopup] = useState(false);
-  const [checkedRows, setCheckedRows] = useState({});
-  const [itemToDeleteId, setItemToDeleteId] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(data.length / pageSize);
-  const paginatedData = data.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
-  const totalRecordsPerPage = paginatedData.length;
-  const [showPopUp, setShowPopUp] = useState(false);
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-   // Update checkedRows state when data prop changes
-useEffect(() => {
-  const initialCheckedRows = {};
-  data.forEach((item, index) => {
-    initialCheckedRows[index] = item.active; // Assuming the 'active' property indicates the product's active/inactive status
-  });
-  setCheckedRows(initialCheckedRows);
-}, [data]);
+const Financialyeartable = ({ data, columns, pageSize,onDataRefresh  }) => {
+    const [showPopup, setShowPopup] = useState(false);
+      const [checkedRows, setCheckedRows] = useState({});
+    const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = Math.ceil(data.length / pageSize);
+    const paginatedData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const totalRecordsPerPage = paginatedData.length;
   
-  // const handleSwitchChange = (rowIndex, isChecked) => {
-  //   setCheckedRows((prevCheckedRows) => ({
-  //     ...prevCheckedRows,
-  //     [rowIndex]: isChecked,
-  //   }));
-  // };
+    const handlePageChange = (page) => {
+      setCurrentPage(page);
+    };
+    const handleSwitchChange = (rowIndex, isChecked) => {
+      setCheckedRows((prevCheckedRows) => ({
+        ...prevCheckedRows,
+        [rowIndex]: isChecked,
+      }));
+    };
+    // form toggle 
+    const togglePopup = () => {
+      setShowPopup(!showPopup);
+    };
 
-  const togglePopup = () => {
-    setShowPopup(!showPopup);
-  };
 
-  const handleDelete = async (id) => {
-    setShowPopUp(true);
-    setItemToDeleteId(id);
-  };
-
-  const handleDeleteConfirmed = async () => {
-    try {
-      const baseURL = import.meta.env.VITE_BASE_URL;
-      const url = `${baseURL}users/${itemToDeleteId}`;
-      await axios.delete(url);
-      onDataRefresh();
-      setShowPopUp(false);
-    } catch (error) {
-      console.log(error);
-      alert(error);
-    }
-  };
-
-  const handleCancel = () => {
-    console.log("Cancelled");
-    setShowPopUp(false);
-  };
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
-  const handleuseraccountactive = async (userid , isActive) => {
-    try {
-      const url = `${import.meta.env.VITE_BASE_URL}/users/${userid}/toggle`;
-      await axios.put(url, { active: isActive });
-      onDataRefresh();
-    } catch (error) {
-      console.error('Error toggling finacial  status:', error);
-      alert('Error toggling users status');
-    }
-  };
-  const handleSwitchChange = (rowIndex, isChecked) => {
-    setCheckedRows((prevCheckedRows) => ({
-      ...prevCheckedRows,
-      [rowIndex]: isChecked,
-    }));
-    const userid = data[rowIndex]._id; // Assuming _id is the unique identifier for each product
-    handleuseraccountactive(userid, isChecked);
-  };
-  
   return (
-    <div className='h-auto mx-2'>
- {showPopup  && < Createuser onClose={togglePopup} onDataRefresh={onDataRefresh}/>}
-    <div className="container mx-auto p-4  bg-white z-10">
-      
+    <div>
+        <div  className='h-auto mx-2'>
+       {showPopup  && <CreateRols onClose={togglePopup} onDataRefresh={onDataRefresh} />}
+    <div className="container mx-auto p-4  bg-white">
       <div className='flex justify-between mb-4'>
         <div className='flex items-center ' >
         <BsFilterLeft className='mr-2'/>
@@ -117,10 +57,9 @@ useEffect(() => {
         className='border-none border-b-0'
         sx={{ border: 'none', '&:focus': { border: 'none' } }}
         defaultValue={30}
-        disableUnderline
       >
         <option value={10} className='border-none'>
-          Month
+          Mounth
         </option>
         <option value={20} className='border-none'>
           Week
@@ -139,7 +78,6 @@ useEffect(() => {
         <MdOutlineFormatListBulleted  className='mx-3 text-black'/>
         <LuFilter className='mx-3 text-black' />
           <button className='text-white px-3 p-1 text-sm font-normal rounded' style={{backgroundColor:'#00BBD1'}} onClick={togglePopup}>+ Create New</button>
-        
         </div>
       </div>
       <hr  />
@@ -165,24 +103,9 @@ useEffect(() => {
 
             <tr key={index} className="hover:bg-gray-100 shadow-sm py-3 rounded-md">
               {columns.map((column) => (
-                
-                <td key={column.key} className="py-2 px-4 font-light">
-                {column.key === 'profilePic' ? (
-                  <img
-                    src={`http://localhost:5000/uploads/profiles/${row[column.key] || 'default-profile.png'}`}
-                    alt="Profile"
-                    style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '10%' }}
-                  />
-                ) : column.key === 'nameAndEmail' ? (
-                  <div>
-                    <div>{row.name}</div>
-                    <div>{row.email}</div>
-                    <div>{row.mobile}</div>
-                  </div>
-                ) : (
-                  row[column.key]
-                )}
-              </td>
+                <td key={column.key} className="py-2 px-4   font-light">
+                  {row[column.key]}
+                </td>
               ))}
               <td className='py-2 px-4 flex items-center'>
               <Switch
@@ -211,10 +134,10 @@ useEffect(() => {
               
               <td className="py-2 px-4 ">
                 <button className="px-2 py-1 mr-2  rounded" onClick={() => handleEdit(row)}>
-                <FaEdit  className='w-6 h-8'/>
+                  <img src={edit} alt="" />
                 </button>
-                <button className="px-2 py-1 mr-2  rounded hover:text-red-500"  onClick={() => handleDelete(row._id)}>
-                <MdDelete className='w-6 h-8' />
+                <button className="px-2 py-1 mr-2  rounded" onClick={() => handleEdit(row)}>
+                  <img src={edit} alt="" />
                 </button>
                 {/* <button className="px-2 py-1    rounded  " onClick={() => handleDelete(row)}>
                  <img src={del} className='text-red-500' alt="" />
@@ -225,14 +148,7 @@ useEffect(() => {
           ))}
         </tbody>
       </table>
-  
-      {showPopUp && (
-       <Deletepop 
-       message="Are you sure you want to delete?"
-       onCancel={handleCancel}
-       onDelete={handleDeleteConfirmed}
-     />
-      )}
+
       <div className="mt-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <span className="px-3 py-2 " style={{color:'#999999'}}>{`Records Per Page: ${totalRecordsPerPage} `}</span>
@@ -265,14 +181,9 @@ useEffect(() => {
         </div>
       </div>
     </div>
-  );
-};
+    </div>
+    </div>
+  )
+}
 
-AdminTable.propTypes = {
-  data: PropTypes.array.isRequired,
-  columns: PropTypes.array.isRequired,
-  pageSize: PropTypes.number.isRequired,
-  onDataRefresh: PropTypes.func.isRequired,
-};
-
-export default AdminTable;
+export default Financialyeartable
