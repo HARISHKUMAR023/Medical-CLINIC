@@ -39,12 +39,17 @@ console.log(loginusername)
 
 
   const handleChange = (e) => {
-    if (e.target.name === 'profilePic') {
-      setFormData({ ...formData, profilePic: e.target.files[0] }); // Update profilePic with the selected file
+    const { name, value } = e.target;
+    
+    if (name === 'profilePic') {
+      setFormData({ ...formData, profilePic: e.target.files[0] });
     } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+      setFormData({ ...formData, [name]: value });
     }
   };
+  
+  
+  
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -57,7 +62,7 @@ console.log(loginusername)
     postData.append('name', formData.name);
     postData.append('email', formData.email);
     postData.append('mobile', formData.mobile);
-    postData.append('role', formData.role);
+    postData.append('roles', formData.roles);
     postData.append('password', formData.password);
     postData.append('confirmPassword', formData.confirmPassword);
     postData.append('profilePic', formData.profilePic); // Append the file to FormData
@@ -152,10 +157,10 @@ console.log(loginusername)
 
        
         <div className='mx-3 my-3'>
-        <label className="block text-gray-500 text-sm font-medium " htmlFor="Phone">
+        <label className="block text-gray-500 text-sm font-medium "htmlFor="roles">
             Role <span className='text-rose-400'>*</span> 
           </label>
-          <Autocomplete  className=' rounded w-80'
+          {/* <Autocomplete  className=' rounded w-80'
       options={roles}
       value={formData.role}
       onChange={(event, newValue) => {
@@ -169,7 +174,22 @@ console.log(loginusername)
           variant="outlined"
         />
       )}
-    />
+    /> */}
+<select
+  className='border border-gray-300 bg-white p-2 py-4 rounded w-80'
+  name="roles"
+  id="roles"
+  value={formData.roles} // Ensure that the value corresponds to the role ID
+  onChange={handleChange}
+  required
+>
+  <option value="">Select Role</option>
+  {roles.map(role => (
+    <option key={role._id} value={role._id}>{role.role}</option> // Set value to role ID
+  ))}
+</select>
+
+
           
            {/* <select
                 className='border border-gray-300  bg-white p-2 py-4 rounded w-80'

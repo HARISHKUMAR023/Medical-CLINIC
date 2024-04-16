@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import  { useState, useEffect,useRef } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
@@ -10,7 +10,9 @@ import Button from '@mui/material/Button';
 import BillingPreview from "../../../components/billing/BillingPreview";
 import { useReactToPrint } from 'react-to-print';
 import Invoice from "../../../components/billing/Invoice";
-
+import Invoicemain from "../../../components/billing/Invoicemain";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 const Billing = () => {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,6 +21,25 @@ const Billing = () => {
   const [cgst, setCgst] = useState(0);
   const [sgst, setSgst] = useState(0);
   const [selectedType, setSelectedType] = useState("");
+ const [ invoicefechdata , setInvoicefechdata ] = useState([]);
+
+ const componentRef = useRef();
+
+  // Fetch products from the server
+  const fetchProductsall = async () => {
+    const baseURL = import.meta.env.VITE_BASE_URL;
+    const url = `${baseURL}/billingdata`;
+    const response = await axios.get(url);
+    setInvoicefechdata (response.data.bills);
+    console.log(response.data.bills)  
+    // console.log(response.data.stocks)
+  };
+
+  // Call fetchProducts when the component mounts
+  useEffect(() => {
+    fetchProductsall();
+  }, []);
+
   // Fetch products from the server
   const fetchProducts = async () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -125,16 +146,61 @@ const handleClose = () => {
     documentTitle: 'Pharmacy Invoice',
     onAfterPrint: () => setOpen(false), // Close confirmation dialog after printing
   });
+
+  const handlePrintall = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: 'Pharmacyall  Invoice',
+    onAfterPrint: () => setOpen(false), // Close confirmation dialog after printing
+  });
+  // const printDocument = () => {
+  //   const input = document.getElementById('divToPrint');
+  //   html2canvas(input)
+  //     .then((canvas) => {
+  //       const imgData = canvas.toDataURL('image/png');
+  //       const pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+  //       const pageWidth = pdf.internal.pageSize.getWidth();
+  //       const pageHeight = pdf.internal.pageSize.getHeight();
+  
+  //       let width = canvas.width;
+  //       let height = canvas.height;
+  
+  //       // calculate the width and height, max is the dimension of A4
+  //       if (width > height) {
+  //         if (width > pageWidth) {
+  //           height *= pageWidth / width;
+  //           width = pageWidth;
+  //         }
+  //       } else {
+  //         if (height > pageHeight) {
+  //           width *= pageHeight / height;
+  //           height = pageHeight;
+  //         }
+  //       }
+  
+  //       pdf.addImage(imgData, 'JPEG', 0, 0, width, height);
+  //       pdf.autoPrint();
+  //       window.open(pdf.output('bloburl'), '_blank');
+  //     });
+  // }
+
+  const handleClick = async () => {
+    await fetchProductsall();
+    handlePrintall(); 
+  };
+  
   return (
-    <div className="flex bg-white my-2 m-2">
+    <div className="flex bg-white my-2 m-2 
+
+    shadow-md
+    ">
       
-      <div className="pt-2 px-2" >
+      <div className="pt-2 px-2 text-black  w-7/12" >
         {/* search the poducts */}
-        <input type="search" name="" id="" className="border-2" placeholder="Search the Product" onChange={e => setSearchTerm(e.target.value)} />
+        <input type="search" name="" id="" className="border-2 rounded-md p-2 font-medium" placeholder="Search the Product" onChange={e => setSearchTerm(e.target.value)} />
         <label className="px-2" htmlFor="tablet">Tablet</label>
-<input type="checkbox" name="tablet" id="tablet" onChange={e => setSelectedType(e.target.checked ? 'tablet' : '')} />
+<input className=" w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="checkbox" name="tablet" id="tablet" onChange={e => setSelectedType(e.target.checked ? 'tablet' : '')} />
 <label className="px-2" htmlFor="serup">Serup</label>
-<input type="checkbox" name="serup" id="serup" onChange={e => setSelectedType(e.target.checked ? 'serup' : '')} />
+<input type="checkbox" name="serup" id="serup" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onChange={e => setSelectedType(e.target.checked ? 'serup' : '')} />
 
       <div className="overflow-auto h-[550px]">
       <table className="table-auto ">
@@ -154,23 +220,23 @@ const handleClose = () => {
                .filter(stock => selectedType === "" || stock.productitem.type === selectedType)
                .filter(stock => stock.productitem.compositionName.toLowerCase().includes(searchTerm.toLowerCase()))
                .map((stock) =>  (
-                <tr key={stock._id} className="text-sm">
-                  <td className="border px-4 py-2">
+                <tr key={stock._id} className="text-sm capitalize border antialiased font-medium">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                     {stock.productitem.compositionName}
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                     {stock.productitem.brand}
                   </td>
-                  <td className="border px-4 py-2">{stock.productitem.type}</td>
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">{stock.productitem.type}</td>
                <td hidden>{stock.sellPrice}</td>
                <td hidden>{stock.MRP}</td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                    {stock.quantity} {stock.quantity > 0 ? "Available" : "Out of stock"}
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                     {new Date(stock.expiryDate).toLocaleDateString()}
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 capitalize antialiased font-medium">
                     <button
                       className=""
                       onClick={() => handleQuantityChange(stock, 1)}
@@ -186,7 +252,7 @@ const handleClose = () => {
                       -
                     </button>
                     <button
-                      className="bg-blue-500 text-white text-xs ml-1 px-0,5"
+                      className="bg-red-500 rounded-sm font-medium text-white text-xs ml-1 px-1 py-1"
                       onClick={() =>
                         handleAddToBill(
                           {
@@ -211,7 +277,7 @@ const handleClose = () => {
       </div>
 
    
-<div className=" Billing Preview">
+<div className=" Billing Preview text-black w-6/12">
 <BillingPreview
     selectedProducts={selectedProducts}
    
@@ -243,9 +309,18 @@ const handleClose = () => {
   />
 </div>
 </div>
+{/* bill container all */}
 
-
-
+   <div hidden >
+   <div ref={componentRef}>
+      <div id="invoiceall-container" >
+        <Invoicemain
+          Invoicedata={invoicefechdata}
+        />
+      </div>
+    </div>
+   </div>
+   {/* <Button onClick={handleClick} color="primary" autoFocus>bill all </Button> */}
 <Dialog
       open={open}
       onClose={handleClose}

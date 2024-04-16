@@ -9,6 +9,11 @@ const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ message: 'Invalid username or password' });
 
+    // Check if user account is active
+    if (!user.active) {
+      return res.status(403).json({ message: 'Account is deactivated, kindly contact admin' });
+    }
+
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) return res.status(401).json({ message: 'Invalid username or password' });
     if (!user.roles || user.roles.length === 0) {

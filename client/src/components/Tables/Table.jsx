@@ -21,6 +21,7 @@ import { IoSearch } from "react-icons/io5";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import CreateRols from '../../Pages/Admin/Rols/CreateRols';
+import { MdDelete } from "react-icons/md";
 const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
   const [showPopup, setShowPopup] = useState(false);
     const [checkedRows, setCheckedRows] = useState({});
@@ -136,7 +137,7 @@ const Table = ({ data, columns, pageSize,onDataRefresh  }) => {
                   <img src={edit} alt="" />
                 </button>
                 <button className="px-2 py-1 mr-2  rounded" onClick={() => handleEdit(row)}>
-                  <img src={edit} alt="" />
+                <MdDelete className="w-6 h-8" />
                 </button>
                 {/* <button className="px-2 py-1    rounded  " onClick={() => handleDelete(row)}>
                  <img src={del} className='text-red-500' alt="" />

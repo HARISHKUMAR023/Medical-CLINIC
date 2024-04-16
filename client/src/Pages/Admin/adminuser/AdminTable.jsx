@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import PropTypes from "prop-types";
 import Switch, { switchClasses } from "@mui/joy/Switch";
 import Box from "@mui/material/Box";
@@ -33,12 +33,21 @@ const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
     setCurrentPage(page);
   };
 
-  const handleSwitchChange = (rowIndex, isChecked) => {
-    setCheckedRows((prevCheckedRows) => ({
-      ...prevCheckedRows,
-      [rowIndex]: isChecked,
-    }));
-  };
+   // Update checkedRows state when data prop changes
+useEffect(() => {
+  const initialCheckedRows = {};
+  data.forEach((item, index) => {
+    initialCheckedRows[index] = item.active; // Assuming the 'active' property indicates the product's active/inactive status
+  });
+  setCheckedRows(initialCheckedRows);
+}, [data]);
+  
+  // const handleSwitchChange = (rowIndex, isChecked) => {
+  //   setCheckedRows((prevCheckedRows) => ({
+  //     ...prevCheckedRows,
+  //     [rowIndex]: isChecked,
+  //   }));
+  // };
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
@@ -73,6 +82,26 @@ const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  const handleuseraccountactive = async (userid , isActive) => {
+    try {
+      const url = `${import.meta.env.VITE_BASE_URL}/users/${userid}/toggle`;
+      await axios.put(url, { active: isActive });
+      onDataRefresh();
+    } catch (error) {
+      console.error('Error toggling finacial  status:', error);
+      alert('Error toggling users status');
+    }
+  };
+  const handleSwitchChange = (rowIndex, isChecked) => {
+    setCheckedRows((prevCheckedRows) => ({
+      ...prevCheckedRows,
+      [rowIndex]: isChecked,
+    }));
+    const userid = data[rowIndex]._id; // Assuming _id is the unique identifier for each product
+    handleuseraccountactive(userid, isChecked);
+  };
+  
   return (
     <div className="h-auto mx-2">
       {showPopup && (
@@ -181,38 +210,32 @@ const AdminTable = ({ data, columns, pageSize, onDataRefresh }) => {
                   </td>
                 ))}
                 <td className="py-2 px-4 flex items-center">
-                  <Switch
-                    color={checkedRows[index] ? "success" : "danger"}
-                    checked={checkedRows[index] || false}
-                    onChange={(event) =>
-                      handleSwitchChange(index, event.target.checked)
-                    }
-                    sx={{
-                      paddingTop: "20px",
-                      "--Switch-thumbSize": "12px",
-                      "--Switch-trackWidth": "30px",
-                      "--Switch-trackHeight": "18px",
-                      "--Switch-trackBackground": "#FF3838",
-                      "&:hover": {
-                        "--Switch-trackBackground": "#FF3838",
-                      },
-                      [`&.${switchClasses.checked}`]: {
-                        "--Switch-trackBackground": "#2CA302",
-                        "&:hover": {
-                          "--Switch-trackBackground": "#2CA302",
+                <Switch
+                      color={checkedRows[index] ? 'success' : 'danger'}
+                      checked={checkedRows[index] || false}
+                      onChange={(event) => handleSwitchChange(index, event.target.checked)}
+                      sx={{
+                         paddingTop: '10px',
+                        '--Switch-thumbSize': '12px',
+                        '--Switch-trackWidth': '30px',
+                        '--Switch-trackHeight': '18px',
+                        '--Switch-trackBackground': '#FF3838',
+                        '&:hover': {
+                          '--Switch-trackBackground': '#FF3838',
                         },
-                      },
-                    }}
-                  />
-                  {checkedRows[index] ? (
-                    <span className="pl-3 text-green-600 text-center mt-5">
-                      Active
-                    </span>
-                  ) : (
-                    <span className="pl-3 text-red-600 text-center mt-5">
-                      Inactive
-                    </span>
-                  )}
+                        [`&.${switchClasses.checked}`]: {
+                          '--Switch-trackBackground': '#2CA302',
+                          '&:hover': {
+                            '--Switch-trackBackground': '#2CA302',
+                          },
+                        },
+                      }}
+                    />
+                    {checkedRows[index] ? (
+                      <span className='pl-3 text-green-600 text-center mt-3'>Active</span>
+                    ) : (
+                      <span className='pl-3 text-red-600 text-center mt-3'>Inactive</span>
+                    )}
                 </td>
                 <td className="py-2 px-4 ">
                   <button
