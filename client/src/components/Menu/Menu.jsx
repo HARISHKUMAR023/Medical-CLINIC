@@ -61,7 +61,7 @@ const Menu = () => {
         <GiHamburgerMenu className="text-2xl text-orange-600 " />
       </button>
       <div
-        className={`text-[#848089] font-normal flex flex-col items-start h-screen Menu pl-2 `}
+        className={`text-black font-normal flex flex-col items-start h-screen Menu pl-2 `}
       >
         {/* <img src={img1} alt="" className={` absolute top-0 left-0 ${isMenuOpen ? 'block' : 'hidden'} `} />
 <img src={ button} alt="" className={` fixed bottom-0  w-52 h-52 ${isMenuOpen ? 'block' : 'hidden'}`} />
@@ -76,12 +76,12 @@ const Menu = () => {
           </div>
         </div>
 
-        <ul className={`mt-10 z-40   dark:text-primary-text `}>
+        <ul className={`mt-10 z-40   dark:text-primary-text overflow-y-auto`}>
         {/* permissions.includes(["read_only", "full_access"]) && */}
         {/* &&(usertype === "admin" || usertype === "user") */}
         { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li
-              className={`flex items-center rounded   ${
+              className={`flex items-center rounded overflow-y-auto ${
                 location.pathname === "/dashboard/home"
                   ? "border-r-4 border-white"
                   : ""
@@ -145,9 +145,9 @@ const Menu = () => {
 
           {  (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
-              <Link
-               to="admin"
-                className="flex items-center m-2 justify-between custom "
+              <p
+               to=""
+                className="flex items-center m-2 justify-between custom cursor-pointer "
                 onClick={() => handleSubMenuClick(2)} // Pass a unique index for each submenu
               >
                 
@@ -165,7 +165,7 @@ const Menu = () => {
                     )}
                   </div>
                
-              </Link>
+              </p>
 
               {/* <Link
                 to="admin"
@@ -280,8 +280,8 @@ const Menu = () => {
 
 { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) &&(
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5 ">
-              <Link
-                className="flex items-center m-2 custom justify-between"
+              <p
+                className="flex items-center m-2 custom justify-between cursor-pointer"
                 onClick={() => handleSubMenuClick(3)} // Pass a unique index for each submenu
               >
                 <div className="flex">
@@ -297,7 +297,7 @@ const Menu = () => {
                     <IoMdArrowDropright className="ml-2 mt-1" />
                   )}
                 </div>
-              </Link>
+              </p>
 
               <Link
                 to="FinancialYear"
@@ -397,8 +397,8 @@ const Menu = () => {
 
 { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
-              <Link
-                className="flex items-center m-2 custom justify-between"
+              <p
+                className="flex items-center m-2 custom justify-between cursor-pointer"
                 onClick={() => handleSubMenuClick(4)} // Pass a unique index for each submenu
               > 
                 <div className="flex">
@@ -414,7 +414,7 @@ const Menu = () => {
                     <IoMdArrowDropright className="ml-2 mt-1" />
                   )}
                 </div>
-              </Link>
+              </p>
               <Link
                 to="Patients"
                 className={`mb-4 m-2 ml-10 custom2 ${
@@ -471,8 +471,8 @@ const Menu = () => {
         </li> */}
          { (permissions.includes("read_only") || permissions.includes("super_admin_all_page")) && (
             <li className="flex flex-col group rounded transition-all duration-300 ease-in-out mt-5">
-              <Link
-                className="flex items-center m-2 custom2 justify-between"
+              <p
+                className="flex items-center m-2 custom2 justify-between cursor-pointer"
                 onClick={() => handleSubMenuClick(5)} // Pass a unique index for each submenu
               >
                 <div className="flex">
@@ -488,7 +488,7 @@ const Menu = () => {
                     <IoMdArrowDropright className="ml-2 mt-1" />
                   )}
                 </div>
-              </Link>
+              </p>
               <Link
                 to="Purchase"
                 className={`mb-4 m-2 ml-5 custom2 ${

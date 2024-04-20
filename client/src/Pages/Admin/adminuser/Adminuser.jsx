@@ -44,7 +44,7 @@ const Adminuser = () => {
 // return () => clearInterval(intervalId);
 
   return (
-    <div>
+    <div className='rounded-md'>
       <AdminTable data={data} columns={columns} pageSize={8}  onDataRefresh={handleDataRefresh} />
     </div>
   )

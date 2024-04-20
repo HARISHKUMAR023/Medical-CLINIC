@@ -110,7 +110,7 @@ console.log(loginusername)
     
     <div className="fixed inset-0 flex  justify-end bg-gray-800 bg-opacity-75 z-50    ">
  <ToastContainer />
-    <div className="bg-white rounded-lg w-6/12">
+    <div className="bg-white rounded-lg w-6/12 dark:bg-dark1">
       <div className="flex justify-between items-center mb-4 p-4 table-head">
         <h2 className="text-2xl font-bold">Create Admin User</h2>
         <button onClick={onClose} className=" hover:text-gray-800 pr-3" style={{color:'#00BBD1'}}>

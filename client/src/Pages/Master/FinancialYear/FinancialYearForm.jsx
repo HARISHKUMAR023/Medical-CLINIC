@@ -64,7 +64,7 @@ const FinancialYearForm = ({ onClose, onDataRefresh, editData  }) => {
     return (
         <div>
                    
-            <div className="fixed inset-0 flex justify-end bg-gray-800 bg-opacity-75 z-50">
+            <div className="fixed inset-0 flex justify-end bg-gray-800 bg-opacity-75 z-50 rounded-md">
             <ToastContainer />
                 <div className="bg-white rounded-lg w-4/12">
                     <div className="flex justify-between items-center mb-4 p-4 table-head">
