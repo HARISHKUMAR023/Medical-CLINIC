@@ -103,30 +103,30 @@ useEffect(() => {
   };
   
   return (
-    <div className="h-auto mx-2">
+    <div className="h-auto mx-4 ">
       {showPopup && (
         <Createuser onClose={togglePopup} onDataRefresh={onDataRefresh} />
       )}
-      <div className="container mx-auto p-4 bg-white z-10">
+      <div className="container mx-auto p-4 bg-white z-10 dark:bg-dark1 rounded-md">
         <div className="flex justify-between mb-4">
           <div className="flex items-center">
             <BsFilterLeft className="mr-2" />
             <p className="mr-3">Sort By:</p>
             <Box
               sx={{ minWidth: 120, border: "none" }}
-              className="border-none bg-white text-white border-white"
+              className="border-none bg-white text-black border-white dark:bg-dark1 dark:text-white"
             >
               <FormControl
                 fullWidth
-                className="border-none bg-white text-white border-white"
+                className="border-none bg-white text-black border-white dark:bg-dark1 dark:text-white"
                 sx={{ border: "none" }}
               >
                 <NativeSelect
-                  className="border-none border-b-0"
+                  className="border-none border-b-0 pl-1 dark:bg-dark1 dark:text-white"
                   sx={{ border: "none", "&:focus": { border: "none" } }}
                   defaultValue={30}
                 >
-                  <option value={10} className="border-none">
+                  <option value={10} className="border-none ">
                     Mounth
                   </option>
                   <option value={20} className="border-none">
@@ -143,12 +143,12 @@ useEffect(() => {
             </p>
           </div>
           <div className="flex items-center">
-            <IoSearch className="mx-3 text-black" />
-            <MdOutlineFormatListBulleted className="mx-3 text-black" />
-            <LuFilter className="mx-3 text-black" />
+            <IoSearch className="mx-3 text-black dark:text-dark-orange" />
+            <MdOutlineFormatListBulleted className="mx-3 text-black dark:text-dark-orange" />
+            <LuFilter className="mx-3 text-blackdark:text-dark-orange dark:text-dark-orange" />
             <button
-              className="text-white px-3 p-1 text-sm font-normal rounded"
-              style={{ backgroundColor: "#00BBD1" }}
+              className="text-black px-3 p-1 text-sm font-semibold rounded bg-dark-orange"
+              style={{ backgroundColor: "" }}
               onClick={togglePopup}
             >
               + Create New
@@ -156,11 +156,11 @@ useEffect(() => {
           </div>
         </div>
         <hr />
-        <table className="min-w-full bg-white text-slate-700 text-sm mt-3">
+        <table className="min-w-full bg-white text-slate-700 dark:bg-dark1 text-sm mt-3">
           <thead>
             <tr
-              className="text-black shadow-sm text-center items-center rounded-md"
-              style={{ backgroundColor: "#EAEAEA" }}
+              className="text-black dark:text-white shadow-sm text-center items-center rounded-md"
+              style={{ backgroundColor: "" }}
             >
               {columns.map((column) => (
                 <th

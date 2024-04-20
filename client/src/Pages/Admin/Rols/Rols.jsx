@@ -39,9 +39,9 @@ const handleDataRefresh = async () => {
 };
 
   return (
-    <div>
+    <div className='dark:bg-dark1'>
  
-      <Table data={data} columns={columns} pageSize={8} onDataRefresh={handleDataRefresh} />
+      <Table className='dark:bg-dark1' data={data} columns={columns} pageSize={8} onDataRefresh={handleDataRefresh} />
     </div>
   );
 };

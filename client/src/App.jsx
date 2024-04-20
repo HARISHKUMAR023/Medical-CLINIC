@@ -25,6 +25,7 @@ import Log from './Pages/Log/Log';
 import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactGA from 'react-ga';
+import { Height } from '@mui/icons-material';
 ReactGA.initialize('G-EZ432Z7GGJ');
 ReactGA.pageview(window.location.pathname + window.location.search);
 const Layout = () => {
@@ -37,24 +38,26 @@ const Layout = () => {
     return <Navigate to="/" />;
   }
   return (
-    <div className={darkMode ? 'dark' : ''}>
-<div  className="bg-white  dark:bg-[#1e1e1e] text-black dark:text-white  flex flex-row h-screen overflow-hidden ">
-      {/* <div className="container flex flex-row "> */}
-        <div className="menucontainer  max-h-screen">
-          <Menu />
+    <div className={`max-h-screen overflow-hidden ${darkMode ? 'dark' : ''}`}>
+    <div className="bg-white dark:bg-[#1e1e1e] text-black dark:text-white flex flex-row">
+      <div className="menucontainer ">
+        <Menu />
+      </div>
+      <div className="content-Container w-full pb-4 max-h-full dark:bg-[#1e1e1e] dark:text-white">
+        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+        <ToastContainer />
+        <div className="bg-[#E5EAEF] dark:bg-[#333333] py-2 h-full overflow-y-auto rounded-s-md">
+          {/* Adjust the height of the div below */}
+          
+            <Outlet className="mb-4" />
+          
         </div>
-        <div className="content-Container basis-full h-auto w-64 dark:bg-[#1e1e1e] dark:text-white">
-          <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
-          <ToastContainer />
-          <div className="overflow-y-auto bg-[#E5EAEF] dark:bg-[#333333] pt-2 rounded-s-xl">
-            <Outlet />
-          </div>
-          <Footer />
-        </div>
-      {/* </div> */}
-      
+        
+        <Footer />
+      </div>
     </div>
-    </div>
+  </div>
+  
     
   );
 };
@@ -120,6 +123,10 @@ const router = createBrowserRouter([
         element: <Billing />,
        
       },
+      {
+        path: "*",
+        element: <Pagenotfouned />,
+      },
 
     ],
   },
@@ -127,14 +134,12 @@ const router = createBrowserRouter([
     path: "/",
     element: <Login />,
   },
-  {
-    path: "*",
-    element: <Pagenotfouned />,
-  },
+
   {
     path: "/logview",
     element: <Log />,
   },
+
 ]);
 function App() {
   // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
