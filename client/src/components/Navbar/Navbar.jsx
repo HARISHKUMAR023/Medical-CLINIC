@@ -28,9 +28,10 @@ import profile from '../../assets/images/icons/menu/profile.png';
 import { MdDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 const Navbar = ({ darkMode, setDarkMode }) => {
-
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('darkMode', newDarkMode);
   };
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
