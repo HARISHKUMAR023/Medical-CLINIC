@@ -2,12 +2,25 @@ const User = require('../models/User.model'); // Replace with your user model pa
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const RolePermission = require('../models/roles.model');
+const logger = require('../loger');
+const logRequest = require('../middlewares/logrequset'); // Import the logRequest middleware
+// logger.error('This is an error message');
 const login = async (req, res) => {
+
+ 
   try {
     const { name, email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: 'Invalid username or password' });
+    if (!user){ 
+      const ip = req.ip;
+      const url = req.originalUrl;
+      const method = req.method;
+      logger.error('Invalid username or password', { ip, method, url });
+      // , Method: ${method}, URL: ${url}
+      // logger.log(level, message, { ip, method, url });
+      // logger.error('Invalid username or password', { ip, method, url });
+      return res.status(401).json({ message: 'Invalid username or password' });}
 
     // Check if user account is active
     if (!user.active) {

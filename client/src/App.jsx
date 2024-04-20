@@ -21,13 +21,17 @@ import Purchase from './Pages/Activity/Purchase/Purchase';
 import AddPurchase from './Pages/Activity/Purchase/AddPurchase';
 import Billing from './Pages/Activity/Billing/Billing';
 import Pagenotfouned from './Pages/Pagenotfouned';
+import Log from './Pages/Log/Log';
 import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactGA from 'react-ga';
 ReactGA.initialize('G-EZ432Z7GGJ');
 ReactGA.pageview(window.location.pathname + window.location.search);
 const Layout = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedDarkMode = localStorage.getItem('darkMode');
+    return savedDarkMode === 'true'; // localStorage stores everything as a string
+  });
   const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn )
   if (!isLoggedIn) {
     return <Navigate to="/" />;
@@ -126,6 +130,10 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <Pagenotfouned />,
+  },
+  {
+    path: "/logview",
+    element: <Log />,
   },
 ]);
 function App() {
