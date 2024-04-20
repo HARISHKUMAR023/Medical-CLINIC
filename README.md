@@ -1,18 +1,20 @@
 
-```markdown
+
 # Billing and Pharmacy Management Software
 
 Welcome to the documentation for our billing and pharmacy management software. This software is designed to streamline billing processes and manage pharmacy-related activities.
 
 ## Table of Contents
 
-- [About](#about)
-- [Documentation](#documentation)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contribution](#contribution)
-- [License](#license)
+- [Billing and Pharmacy Management Software](#billing-and-pharmacy-management-software)
+  - [Table of Contents](#table-of-contents)
+  - [About](#about)
+  - [Documentation](#documentation)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contribution](#contribution)
+  - [License](#license)
 
 ## About
 
