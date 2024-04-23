@@ -1,27 +1,20 @@
-# Use a Node.js image as the base
-FROM node:20.11-alpine AS builder
+# Use the Node.js 16 image as the base image
+FROM node:latest
 
-# Set the working directory
+# Set the working directory in the container to /app
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package*.json ./
+# Copy package.json and package-lock.json to the working directory
+COPY package.json package-lock.json ./
+
+# Install the application dependencies
 RUN npm install
 
-# Copy the entire project directory (excluding node_modules)
+# Copy the rest of the application code to the working directory
 COPY . .
 
-# Create a new image to serve the application
-FROM node:20.11-alpine
-
-# Set the working directory
-WORKDIR /app
-
-# Copy only the production-ready code (excluding node_modules)
-COPY . .
-
-# Expose the port (adjust if you use a different port)
+# Expose port 5000 for the application
 EXPOSE 5000
 
-# Start the server (replace "index.js" if your entry point is different)
-CMD [ "node", "server.js" ]
+# Define the command to run the application
+CMD ["node", "server.js"]
