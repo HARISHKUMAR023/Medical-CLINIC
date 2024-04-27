@@ -13,13 +13,7 @@ const login = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user){ 
-      const ip = req.ip;
-      const url = req.originalUrl;
-      const method = req.method;
-      logger.error('Invalid username or password', { ip, method, url });
-      // , Method: ${method}, URL: ${url}
-      // logger.log(level, message, { ip, method, url });
-      // logger.error('Invalid username or password', { ip, method, url });
+   
       return res.status(401).json({ message: 'Invalid username or password' });}
 
     // Check if user account is active

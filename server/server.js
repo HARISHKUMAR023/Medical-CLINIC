@@ -1,10 +1,12 @@
-const winston = require('winston');
-const stream = require('stream');
+const winston = require("winston");
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
+
+// route imports 
 const rolsRoutes = require('./routes/rols.routes')
 const userRoutes = require('./routes/user.route');
 const authRoutes = require('./routes/auth.routes');
@@ -18,18 +20,57 @@ const PurchaseRoutes = require('./routes/Purchase.routes');
 const Productitem = require('./routes/Productitem.routes');
 const billingRoutes = require('./routes/billing.routes');
 const logRequest = require('./middlewares/logrequset');
-
-const logger = require('./loger'); 
-
+const Log = require('./models/Log.models')
+// const logger = require('./loger'); 
 const app = express();
 require('dotenv').config();
-
 const port = process.env.PORT || 5000;
 const Databaseurl = process.env.MONGO_URI
-
 app.use('/uploads/profiles', express.static(path.join(__dirname, 'uploads/profiles')));
 app.use('/uploads/productfile', express.static(path.join(__dirname, 'uploads/productfile')));
 app.use('/uploads/manufacturerfile', express.static(path.join(__dirname, 'uploads/manufacturerfile')));
+
+
+class MongoDBTransport extends winston.Transport {
+  constructor(options) {
+    super(options);
+    this.name = 'mongoDB';
+    this.db = options.db;
+  }
+
+  log(info, callback) {
+    const entry = new this.db({
+      level: info.level,
+      message: JSON.stringify(info.message),
+      timestamp: new Date(),
+      ip: info.message.ip, 
+    });
+  
+    entry.save()
+      .then(() => {
+        callback(null, true);
+      })
+      .catch((err) => {
+        callback(err);
+      });
+  }
+}
+
+const levels = {
+  error: 0,
+  warn: 1,
+  info: 2
+};
+const logger = winston.createLogger({
+  levels,
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new MongoDBTransport({ db: Log }),
+  ],
+});
+
+
 
 const mongoUri =  Databaseurl;
 
@@ -67,30 +108,18 @@ app.use('/api', Productitem);
 app.use('/api', billingRoutes);
 // app.use('/api',loggerroutes);
 
+const getLogs = async (req, res) => {
+  try {
+    const logs = await Log.find();
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+app.get('/logs', getLogs);
 
-// app.use(errorMiddleware);
-// const logData = [];
-// const writableStream = new stream.Writable({
-//   write: function(chunk, encoding, next) {
-//     logData.push(JSON.parse(chunk));
-//     next();
-//   }
-// });
 
-// const logger = winston.createLogger({
-//   level: 'info',
-//   format: winston.format.json(),
-//   defaultMeta: { service: 'user-service' },
-//   transports: [
-//     new winston.transports.Console({
-//       format: winston.format.simple(),
-//     }),
-//     new winston.transports.File({ filename: 'combined.log' }),
-//     new winston.transports.Stream({
-//       stream: writableStream,
-//     }),
-//   ],
-// });
+
 app.get('/logs', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -107,33 +136,31 @@ app.get('/logs', (req, res) => {
     clearInterval(logInterval);
   });
 });
-// app.get('/logs', (req, res) => {
-//   res.setHeader('Content-Type', 'text/event-stream');
-//   res.setHeader('Cache-Control', 'no-cache');
-//   res.setHeader('Connection', 'keep-alive');
+app.set('trust proxy', true);
+app.use((req, res, next) => {
+  const ip = req.headers['x-forwarded-for'] || req.ip;
+  const start = Date.now();
 
-//   // Dummy example: Stream server-side logs every second
-//   const serverLogInterval = setInterval(() => {
-//     const serverLog = `Server log message - ${new Date().toISOString()}\n`;
-//     res.write(`data: ${serverLog}\n\n`);
-//   }, 1000);
+  res.on('finish', () => {
+    const logData = {
+      method: req.method,
+      url: req.url,
+      statusCode: res.statusCode,
+      responseTime: Date.now() - start,
+      ip: ip,
+    };
 
-//   // Dummy example: Stream client-side logs every two seconds
-//   const clientLogInterval = setInterval(() => {
-//     const clientLog = `Client log message - ${new Date().toISOString()}\n`;
-//     res.write(`data: ${clientLog}\n\n`);
-//   }, 2000);
+    if (res.statusCode >= 500) {
+      logger.error(logData);
+    } else if (res.statusCode === 400 || res.statusCode === 404) {
+      logger.warn(logData);
+    } else {
+      logger.info(logData);
+    }
 
-//   // Close SSE connection when the client disconnects
-//   req.on('close', () => {
-//     clearInterval(serverLogInterval);
-//     clearInterval(clientLogInterval);
-//     console.log('Client disconnected from SSE');
-//   });
-// });
-// app.use(logRequest('info'));
-// app.use(logRequest('warning'))
-// app.use(logRequest('error'))
+    next();
+  });
+});
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
