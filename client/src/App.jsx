@@ -25,7 +25,7 @@ import Log from './Pages/Log/Log';
 import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactGA from 'react-ga';
-import { Height } from '@mui/icons-material';
+// import { Height } from '@mui/icons-material';
 ReactGA.initialize('G-EZ432Z7GGJ');
 ReactGA.pageview(window.location.pathname + window.location.search);
 const Layout = () => {
@@ -139,6 +139,10 @@ const router = createBrowserRouter([
     path: "/logview",
     element: <Log />,
   },
+  {
+    path: "*",
+    element: <Pagenotfouned />,
+  }
 
 ]);
 function App() {
