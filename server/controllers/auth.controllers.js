@@ -2,9 +2,14 @@ const User = require('../models/User.model'); // Replace with your user model pa
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const RolePermission = require('../models/roles.model');
-const logger = require('../loger');
+// const logger = require('../loger');
 const logRequest = require('../middlewares/logrequset'); // Import the logRequest middleware
 // logger.error('This is an error message');
+// const pinohttp = require('pino-http')()
+// const loggerpino = require('pino')
+const pino = require("pino");
+const logger = pino()
+const { emitLog } = require('../loger');
 const login = async (req, res) => {
 
  
@@ -13,17 +18,26 @@ const login = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user){ 
-   
+      emitLog('error', 'user not found');
+// logger.error('Invalid username or password')
+      // req.log.info({
+      //   ip: req.ip,
+      //   method: req.method,
+      //   statusCode: 401, // Status code will be 401 if user is not found
+      //   type: 'info'
+      // }, 'Invalid username or password');
       return res.status(401).json({ message: 'Invalid username or password' });}
 
     // Check if user account is active
     if (!user.active) {
+      emitLog('info', 'Account is deactivated, kindly contact admin');
       return res.status(403).json({ message: 'Account is deactivated, kindly contact admin' });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) return res.status(401).json({ message: 'Invalid username or password' });
     if (!user.roles || user.roles.length === 0) {
+      
       throw new Error('User type not assigned');
     }
     const userTypeDetails = await RolePermission.findById(user.roles[0]);
@@ -33,7 +47,7 @@ const login = async (req, res) => {
 
     // Generate and sign JWT with user data and roles
     const token = generateJwtToken(user.id, user.email, user.roles,);
-
+    emitLog('info', 'User logged in');
     res.json({
        name:user.name,
         email, token, 
@@ -45,6 +59,7 @@ const login = async (req, res) => {
 
   } catch (err) {
     console.error(err);
+    emitLog('error', 'User logged in');
     res.status(500).json({ message: 'Server error' });
   }
 };

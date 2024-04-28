@@ -4,7 +4,7 @@ const RolePermission = require('../models/roles.model');
 const multer = require('multer');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-
+const { emitLog } = require('../loger');
 // Multer storage configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -25,6 +25,7 @@ const fileFilter = (req, file, cb) => {
   ) {
     cb(null, true); // Accept the file
   } else {
+    emitLog('error', 'Invalid file type');
     cb(new Error('Invalid file type'), false); // Reject the file
   }
 };
@@ -43,6 +44,7 @@ const register = async (req, res) => {
     // Handle file upload
     upload(req, res, async (err) => {
       if (err) {
+        emitLog('error', err);
         console.error('Error uploading file:', err);
         return res.status(400).json({ message: 'Error uploading file', error: err.message });
       }
@@ -51,6 +53,7 @@ const register = async (req, res) => {
 
       // Check if the role is provided
       if (!roles || roles.length === 0) {
+        emitLog('error', "Role is required");
         return res.status(400).json({ message: 'Role is required' });
       }
 
@@ -87,12 +90,13 @@ const register = async (req, res) => {
 
       // Save the new user to the database
       await newUser.save();
-
+      emitLog('info', "User created successfully");
       // Send a success response
       res.status(201).json({ message: 'User created successfully' });
     });
   } catch (err) {
     // Handle errors
+    emitLog('info', err);
     console.error('Error creating user:', err);
     res.status(500).json({ message: 'Error creating user' });
   }
@@ -102,8 +106,11 @@ const register = async (req, res) => {
 const getuserdata = async (req, res) => {
   try {
     const response = await User.find();
+    ip=req.ip
+    emitLog('info', `User data is feched succesfuly form ${ ip}`);
     res.json(response);
   } catch (error) {
+    emitLog('error', error);
     console.error('Error fetching user data:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
@@ -115,10 +122,12 @@ const deleteUser = async (req, res) => {
   try {
     const userDelete = await User.findByIdAndDelete(userId);
     if (!userDelete) {
+      emitLog('error',  "User not found ");
       return res.status(404).json({ message: "User not found " +  userId});
       // console.log(userDelete)
       // console.log(userID)
     }
+    emitLog('error', `User with id ${userId} is deleted`);
     res.status(200).json({ message: `User with id ${userId} is deleted` });
   } catch (error) {
     console.log(error);
@@ -134,12 +143,15 @@ const toggleUserActiveStatus = async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(userId);
     if (!user) {
+      emitLog('error', " User not found");
       return res.status(404).json({ message: 'User not found' });
     }
     user.active = !user.active;
     await user.save();
+    emitLog('error', " User status toggled successfully");
     res.status(200).json({ message: 'User status toggled successfully', user });
   } catch (err) {
+    emitLog('error', err);
     console.error('Error toggling user status:', err);
     res.status(500).json({ message: 'Error toggling user status', error: err.message });
   }

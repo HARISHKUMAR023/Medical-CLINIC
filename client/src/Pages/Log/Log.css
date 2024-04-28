@@ -6,3 +6,8 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .logimg{
+    background: url('../../assets/bg-2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }

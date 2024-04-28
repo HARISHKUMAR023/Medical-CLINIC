@@ -1,9 +1,10 @@
 // import Asitelog from "./logcomponents/Asitelog";
 import LogViewer from "./Logviewer";
 // import LogTable from "./LogTable";
+import "./Log.css";
 const Log = () => {
   return (
-    <div>
+    <div className="logimg h-screen w-full">
       <LogViewer/>
    {/* <div className="flex flex-row w-screen h-screen">
 <div className="w-2/12" >

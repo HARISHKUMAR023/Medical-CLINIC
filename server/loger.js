@@ -1,20 +1,16 @@
-const { createLogger, transports, format } = require('winston');
-require('winston-mongodb');
-require('dotenv').config();
-const databaseUrl = process.env.MONGO_URI;
+const pino = require('pino');
+const logger = pino();
+let io;
 
-const logger = createLogger({
-  level: 'info',
-  format: format.combine(
-    format.timestamp(),
-    format.json(),
-    format.metadata({ fillExcept: ['message', 'level', 'timestamp', 'label'] })
-  ),
-  transports: [
-    new transports.Console(),
-    new transports.File({ filename: 'error.log', level: 'error' }),
-    new transports.MongoDB({ db: databaseUrl, collection: 'logs', meta: true ,level: 'info' ,options: { useUnifiedTopology: true }})
-  ]
-});
+const setIo = (socketIo) => {
+  io = socketIo;
+};
 
-module.exports = logger;
+const emitLog = (level, message) => {
+  logger[level](message);
+  if (io) {
+    io.sockets.emit('log', message);
+  }
+};
+
+module.exports = { emitLog, setIo };
